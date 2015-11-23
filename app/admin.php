@@ -19,7 +19,8 @@ class WpKpiDashboard_Admin
     $this->helper = new WpKpiDashboard_Helper();
 
     // Set hooks
-    add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+    add_action( 'admin_menu',            array( &$this, 'admin_menu' ) );
+    add_action( 'admin_enqueue_scripts', array( &$this, 'admin_script' ) );
   }
 
   /**
@@ -40,6 +41,13 @@ class WpKpiDashboard_Admin
    */
   public function render_admin_page() {
     $this->get_template( 'general' );
+  }
+
+  /**
+   * Load scripts for admin.
+   */
+  public function admin_script() {
+    wp_enqueue_script( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'assets/js/admin.js' );
   }
 
   /**

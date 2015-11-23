@@ -48,6 +48,11 @@ class WpKpiDashboard
       define( 'WP_KPI_DASHBOARD_DIR', plugin_dir_path( __FILE__ ) );
     }
 
+    // Plugin URL
+    if ( !defined( 'WP_KPI_DASHBOARD_URL' ) ) {
+      define( 'WP_KPI_DASHBOARD_URL', plugins_url( '/', __FILE__ ) );
+    }
+
     // Plugin Domain
     if( !defined( 'WP_KPI_DASHBOARD_DOMAIN' ) ) {
       define( 'WP_KPI_DASHBOARD_DOMAIN', 'wp-kpi-dashboard' );

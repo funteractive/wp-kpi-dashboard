@@ -23,19 +23,34 @@ $months_name = [
   'October',
   'November',
   'December'
-]
+];
+
+// default year
+$start_year = 2015;
+$end_year = 2030;
+if( isset( $_GET['year'] ) && $_GET['year'] && ( $start_year <= $_GET['year'] && $_GET['year'] <= $end_year ) ) {
+  $default_year = esc_html( $_GET['year'] );
+} else {
+  $default_year = date( 'Y' );
+}
 ?>
 
 <div class="wrap">
   <h2><?php $helper->e( 'WP KPI Dashboard' ); ?></h2>
 
-  <select name="" id="">
-    <?php for( $year = 2015; $year <= 2030; $year++ ): ?>
-      <option value="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></option>
-    <?php endfor; ?>
-  </select>
-
   <form action="<?php echo admin_url( 'options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN ); ?>" method="POST">
+    <select name="year">
+      <?php for( $year = $start_year; $year <= $end_year; $year++ ):
+        $selected = '';
+        if( $year == $default_year )
+          $selected = ' selected';
+        ?>
+        <option value="<?php echo esc_attr( $year ); ?>"<?php echo $selected; ?>>
+          <?php echo esc_html( $year ); ?>
+        </option>
+      <?php endfor; ?>
+    </select>
+
     <table class="form-table">
       <tbody>
       <?php for( $month = 1; $month <= 12; $month++ ): ?>
