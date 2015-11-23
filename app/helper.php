@@ -7,10 +7,10 @@ if ( !defined( 'ABSPATH' ) )
 class WpKpiDashboard_Helper
 {
   public function _( $string ) {
-    return __( $string, WP_AUTH_DOMAIN );
+    return __( $string, WP_KPI_DASHBOARD_DOMAIN );
   }
 
   public function e( $string ) {
-    return _e( $string, WP_AUTH_DOMAIN );
+    return _e( $string, WP_KPI_DASHBOARD_DOMAIN );
   }
 }
