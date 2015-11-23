@@ -10,6 +10,12 @@ if ( !defined( 'ABSPATH' ) )
 class WpKpiDashboard_Admin
 {
 
+  public $save_action = 'wp-kpi-dashboard-save';
+
+  protected $option_name = [
+    'pv' => 'wp_kpi_dashboard_pv_kpi'
+  ];
+
   /**
    * WpKpiDashboard_Admin constructor.
    */
@@ -43,6 +49,19 @@ class WpKpiDashboard_Admin
     $this->get_template( 'general' );
   }
 
+  public function setup() {
+    var_dump($_POST);
+    // When save
+    if( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], $this->save_action ) ) {
+      if( !isset( $_POST['year'] ) || !$_POST['year'] )
+        new WP_Error( 'error', $this->helper->_( 'Year is not set.' ) );
+
+      $this->update_option( 'pv' );
+    } else {
+
+    }
+  }
+
   /**
    * Load scripts for admin.
    */
@@ -60,5 +79,36 @@ class WpKpiDashboard_Admin
     if( file_exists( $path ) ){
       include $path;
     }
+  }
+
+  private function save_option( $option_key, $value ) {
+    $option_name = $this->option_name[$option_key];
+    var_dump($value);
+    if( get_option( $option_name ) ) {
+      update_option( $option_name, serialize( $value ) );
+    } else {
+      add_option( $option_name, serialize( $value ) );
+    }
+  }
+
+  private function get_option( $option_key ) {
+    $option_name = $this->option_name[$option_key];
+    if( $value = get_option( $option_name ) ) {
+      return unserialize( $value );
+    } else {
+      return false;
+    }
+  }
+
+  private function update_option( $option_key ) {
+    $value = $this->get_option( $option_key );
+    $update_value = [];
+    $year = esc_html( $_POST['year'] );
+
+    for( $month = 1; $month <= 12; $month++ ) {
+      $update_value[] = esc_html( $_POST["month_{$month}"] );
+    }
+    $value[$year] = $update_value;
+    $this->save_option( $option_key, $value );
   }
 }

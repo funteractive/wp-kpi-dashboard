@@ -6,8 +6,14 @@ if ( !defined( 'ABSPATH' ) )
 
 // Include Admin Class
 require_once( WP_KPI_DASHBOARD_DIR . 'app/admin.php' );
+$admin = new WpKpiDashboard_Admin();
+
+// Include Helper Class
 require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
 $helper = new WpKpiDashboard_Helper();
+
+// setup
+$admin->setup();
 
 // months name
 $months_name = [
@@ -24,6 +30,9 @@ $months_name = [
   'November',
   'December'
 ];
+
+// create nonce
+$nonce = wp_create_nonce( $admin->save_action );
 
 // default year
 $start_year = 2015;
@@ -68,6 +77,7 @@ if( isset( $_GET['year'] ) && $_GET['year'] && ( $start_year <= $_GET['year'] &&
       </tbody>
     </table>
     <p class="submit">
+      <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
       <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php $helper->e( 'Save' ); ?>">
     </p>
   </form>
