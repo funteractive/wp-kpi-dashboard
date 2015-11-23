@@ -13,7 +13,7 @@ require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
 $helper = new WpKpiDashboard_Helper();
 
 // setup
-$admin->setup();
+$datas = $admin->template_setup();
 
 // months name
 $months_name = [
@@ -47,8 +47,8 @@ if( isset( $_GET['year'] ) && $_GET['year'] && ( $start_year <= $_GET['year'] &&
 <div class="wrap">
   <h2><?php $helper->e( 'WP KPI Dashboard' ); ?></h2>
 
-  <form action="<?php echo admin_url( 'options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN ); ?>" method="POST">
-    <select name="year">
+  <form action="<?php echo admin_url( 'options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN . '&year=' . $default_year ); ?>" method="POST">
+    <select name="year" id="js-wpkpid-years-select">
       <?php for( $year = $start_year; $year <= $end_year; $year++ ):
         $selected = '';
         if( $year == $default_year )
@@ -60,22 +60,30 @@ if( isset( $_GET['year'] ) && $_GET['year'] && ( $start_year <= $_GET['year'] &&
       <?php endfor; ?>
     </select>
 
-    <table class="form-table">
-      <tbody>
-      <?php for( $month = 1; $month <= 12; $month++ ): ?>
-        <tr>
-          <th>
-            <label for="<?php echo esc_attr( $month ); ?>">
-              <?php $helper->e( $months_name[$month - 1] ); ?>
-            </label>
-          </th>
-          <td>
-            <input type="number" name="month_<?php echo esc_attr( $month ); ?>">
-          </td>
-        </tr>
-      <?php endfor; ?>
-      </tbody>
-    </table>
+    <?php for( $year = $start_year; $year <= $end_year; $year++ ): ?>
+      <table class="form-table js-wpkpid-years-table" id="js-wpkpid-years-table-<?php echo esc_attr( $year ); ?>">
+        <tbody>
+        <?php for( $month = 1; $month <= 12; $month++ ):
+          if( isset( $datas ) && isset( $datas[$year] ) ) {
+            $value = $datas[$year][$month - 1];
+          } else {
+            $value = '';
+          }
+          ?>
+          <tr>
+            <th>
+              <label for="<?php echo esc_attr( $month ); ?>">
+                <?php $helper->e( $months_name[$month - 1] ); ?>
+              </label>
+            </th>
+            <td>
+              <input type="number" name="month_<?php echo esc_attr( $month ); ?>" value="<?php echo esc_html( $value ); ?>">
+            </td>
+          </tr>
+        <?php endfor; ?>
+        </tbody>
+      </table>
+    <?php endfor; ?>
     <p class="submit">
       <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
       <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php $helper->e( 'Save' ); ?>">

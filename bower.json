@@ -1,0 +1,13 @@
+{
+  "name": "wp-kpi-dashboard",
+  "version": "0.0.0",
+  "homepage": "https://github.com/funteractive/wp-kpi-dashboard",
+  "authors": [
+    "Keisuke Imura"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "lodash": "~3.10.1"
+  }
+}

@@ -49,23 +49,24 @@ class WpKpiDashboard_Admin
     $this->get_template( 'general' );
   }
 
-  public function setup() {
-    var_dump($_POST);
+  public function template_setup() {
     // When save
     if( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], $this->save_action ) ) {
       if( !isset( $_POST['year'] ) || !$_POST['year'] )
         new WP_Error( 'error', $this->helper->_( 'Year is not set.' ) );
 
       $this->update_option( 'pv' );
-    } else {
-
     }
+
+    // return default data
+    return $this->get_option( 'pv' );
   }
 
   /**
    * Load scripts for admin.
    */
   public function admin_script() {
+    wp_enqueue_script( 'wp_kpi_dashboard_lodash', WP_KPI_DASHBOARD_URL . 'bower_components/lodash/lodash.min.js' );
     wp_enqueue_script( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'assets/js/admin.js' );
   }
 
