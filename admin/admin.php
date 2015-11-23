@@ -10,30 +10,6 @@ if ( !defined( 'ABSPATH' ) )
 class WpKpiDashboard_Admin
 {
 
-  protected $save_action = 'wp-kpi-dashboard-save';
-
-  protected $start_year = 2010;
-  protected $end_year = 2030;
-
-  protected $months_name = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-
-  protected $option_name = [
-    'pv' => 'wp_kpi_dashboard_pv_kpi'
-  ];
-
   /**
    * WpKpiDashboard_Admin constructor.
    */
@@ -41,6 +17,10 @@ class WpKpiDashboard_Admin
     // include helper
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
+
+    // include services
+    require_once( WP_KPI_DASHBOARD_DIR . 'app/services/pageview.php' );
+    $this->pageview = new WpKpiDashboard_Pageview();
 
     // Set hooks
     add_action( 'admin_menu',            array( &$this, 'admin_menu' ) );
@@ -67,16 +47,6 @@ class WpKpiDashboard_Admin
     $this->get_template( 'general' );
   }
 
-  public function template_setup() {
-    // When save
-    if( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], $this->save_action ) ) {
-      $this->update_option( 'pv' );
-    }
-
-    // return default data
-    return $this->get_option( 'pv' );
-  }
-
   /**
    * Load scripts for admin.
    */
@@ -99,29 +69,4 @@ class WpKpiDashboard_Admin
     }
   }
 
-  private function save_option( $option_key, $value ) {
-    $option_name = $this->option_name[$option_key];
-    if( get_option( $option_name ) ) {
-      update_option( $option_name, serialize( $value ) );
-    } else {
-      add_option( $option_name, serialize( $value ) );
-    }
-  }
-
-  private function get_option( $option_key ) {
-    $option_name = $this->option_name[$option_key];
-    if( $value = get_option( $option_name ) ) {
-      return unserialize( $value );
-    } else {
-      return false;
-    }
-  }
-
-  private function update_option( $option_key ) {
-    if( !isset( $_POST['pv_kpi'] ) || !is_array( $_POST['pv_kpi'] ) )
-      return false;
-
-    $value = $_POST['pv_kpi'];
-    $this->save_option( $option_key, $value );
-  }
 }

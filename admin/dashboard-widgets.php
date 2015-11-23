@@ -19,16 +19,16 @@ class WpKpiDashboard_Widgets
 
   public function add_dashboard_widgets() {
     wp_add_dashboard_widget(
-      'wp_kpi_dashboard',         // Widget slug.
-      $this->helper->_( 'WP KPI Dashboard' ),         // Title.
-      array( &$this, 'example_dashboard_widget_function' ) // Display function.
+      'wp_kpi_dashboard',                     // Widget slug.
+      $this->helper->_( 'WP KPI Dashboard' ), // Title.
+      array( &$this, 'init_widget' )          // Display function.
     );
   }
 
   /**
    * Create the function to output the contents of our Dashboard Widget.
    */
-  function example_dashboard_widget_function() {
+  function init_widget() {
 
     // Display whatever it is you want to show.
     echo "Hello World, I'm a great Dashboard Widget";

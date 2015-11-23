@@ -8,22 +8,26 @@ if ( !defined( 'ABSPATH' ) )
 require_once( WP_KPI_DASHBOARD_DIR . 'admin/admin.php' );
 $admin = new WpKpiDashboard_Admin();
 
+// Include Pageview Class
+require_once( WP_KPI_DASHBOARD_DIR . 'app/services/pageview.php' );
+$pageview = new WpKpiDashboard_Pageview();
+
 // Include Helper Class
 require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
 $helper = new WpKpiDashboard_Helper();
 
 // setup
-$datas = $admin->template_setup();
+$datas = $pageview->template_setup();
 
 // months name
-$months_name = $admin->months_name;
+$months_name = $pageview->months_name;
 
 // create nonce
-$nonce = wp_create_nonce( $admin->save_action );
+$nonce = wp_create_nonce( $pageview->save_action );
 
 // default year
-$start_year = $admin->start_year;
-$end_year = $admin->end_year;
+$start_year = $pageview->start_year;
+$end_year = $pageview->end_year;
 $default_year = date( 'Y' );
 ?>
 
