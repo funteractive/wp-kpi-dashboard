@@ -82,7 +82,7 @@ class WpKpiDashboard_Admin
    */
   public function admin_script() {
     wp_enqueue_script( 'wp_kpi_dashboard_lodash', WP_KPI_DASHBOARD_URL . 'bower_components/lodash/lodash.min.js' );
-    wp_enqueue_script( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'assets/js/admin.js' );
+    wp_enqueue_script( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'admin/assets/js/admin.js' );
   }
 
   /**
@@ -91,7 +91,7 @@ class WpKpiDashboard_Admin
    * @param $name
    */
   public static function get_template( $name ) {
-    $path = WP_KPI_DASHBOARD_DIR . 'app/templates/' . $name . '.php';
+    $path = WP_KPI_DASHBOARD_DIR . 'admin/templates/' . $name . '.php';
     if( file_exists( $path ) ){
       include $path;
     }
