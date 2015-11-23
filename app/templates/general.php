@@ -25,8 +25,6 @@ $nonce = wp_create_nonce( $admin->save_action );
 $start_year = $admin->start_year;
 $end_year = $admin->end_year;
 $default_year = date( 'Y' );
-
-var_dump($_POST);
 ?>
 
 <div class="wrap">
