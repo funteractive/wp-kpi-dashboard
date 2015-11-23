@@ -10,7 +10,25 @@ if ( !defined( 'ABSPATH' ) )
 class WpKpiDashboard_Admin
 {
 
-  public $save_action = 'wp-kpi-dashboard-save';
+  protected $save_action = 'wp-kpi-dashboard-save';
+
+  protected $start_year = 2010;
+  protected $end_year = 2030;
+
+  protected $months_name = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
 
   protected $option_name = [
     'pv' => 'wp_kpi_dashboard_pv_kpi'
@@ -52,9 +70,6 @@ class WpKpiDashboard_Admin
   public function template_setup() {
     // When save
     if( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], $this->save_action ) ) {
-      if( !isset( $_POST['year'] ) || !$_POST['year'] )
-        new WP_Error( 'error', $this->helper->_( 'Year is not set.' ) );
-
       $this->update_option( 'pv' );
     }
 
@@ -84,7 +99,6 @@ class WpKpiDashboard_Admin
 
   private function save_option( $option_key, $value ) {
     $option_name = $this->option_name[$option_key];
-    var_dump($value);
     if( get_option( $option_name ) ) {
       update_option( $option_name, serialize( $value ) );
     } else {
@@ -102,14 +116,10 @@ class WpKpiDashboard_Admin
   }
 
   private function update_option( $option_key ) {
-    $value = $this->get_option( $option_key );
-    $update_value = [];
-    $year = esc_html( $_POST['year'] );
+    if( !isset( $_POST['pv_kpi'] ) || !is_array( $_POST['pv_kpi'] ) )
+      return false;
 
-    for( $month = 1; $month <= 12; $month++ ) {
-      $update_value[] = esc_html( $_POST["month_{$month}"] );
-    }
-    $value[$year] = $update_value;
+    $value = $_POST['pv_kpi'];
     $this->save_option( $option_key, $value );
   }
 }
