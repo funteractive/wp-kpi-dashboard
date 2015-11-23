@@ -4,6 +4,8 @@
   window.onload = function() {
     var Years = function() {
       this.select = document.getElementById('js-wpkpid-years-select');
+      if(!this.select)
+        return false;
 
       this.setEvents();
       this.changeTable(this.select);
