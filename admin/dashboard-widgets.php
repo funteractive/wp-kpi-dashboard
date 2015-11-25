@@ -34,9 +34,23 @@ class WpKpiDashboard_Widgets
    */
   public function init_widget() {
 
-    $html = $this->get_pageview_kpi();
+    $kpi = $this->get_pageview_kpi();
+    $html = $this->get_kpi_block_html( $kpi, 'Pageview' );
 
     echo $html;
+  }
+
+  private function get_kpi_block_html( $kpi, $title ) {
+    $html = <<<EOL
+<div class="wpkpi_db_block">
+  <p class="wpkpi_db_block_title">{$title}</p>
+  <span class="wpkpi_db_value">100</span>
+  <span class="wpkpi_db_divider">/</span>
+  <span class="wpkpi_db_kpi">{$kpi}</span>
+</div>
+EOL;
+
+    return $html;
   }
 
   private function get_pageview_kpi() {
