@@ -59,7 +59,11 @@ class WpKpiDashboard
     }
 
     // Option Page
-    require_once( WP_KPI_DASHBOARD_DIR . 'app/admin.php' );
+    require_once( WP_KPI_DASHBOARD_DIR . 'admin/admin.php' );
     $this->admin = new WpKpiDashboard_Admin();
+
+    // Dashboard widget
+    require_once( WP_KPI_DASHBOARD_DIR . 'admin/dashboard-widgets.php' );
+    $this->dashboard_widgets = new WpKpiDashboard_Widgets();
   }
 }
