@@ -87,7 +87,24 @@ EOL;
     $year = date( 'Y' );
     $month = date( 'n' );
 
-    $show_kpi = $page_view_kpi[$year][$month];
+    switch( $period ) {
+      case 'Daily':
+        $monthly_kpi = $page_view_kpi[$year][$month];
+        $dates = date( 't', mktime( 0, 0, 0, $month, 1, $year ) );
+        $show_kpi = round( $monthly_kpi / $dates, 1 );
+        break;
+      case 'Monthly':
+        $show_kpi = $page_view_kpi[$year][$month];
+        break;
+      case 'Yearly':
+        $show_kpi = 0;
+        $yearly_kpi_arr = $page_view_kpi[$year];
+
+        foreach( $yearly_kpi_arr as $monthly_kpi ) {
+          $show_kpi += $monthly_kpi;
+        }
+        break;
+    }
 
     return $show_kpi;
   }
