@@ -3,7 +3,7 @@
 
   window.onload = function() {
     var Years = function() {
-      this.select = document.getElementById('js-wpkpid-years-select');
+      this.select = document.getElementById('js-wpkpidb-years-select');
       if(!this.select)
         return false;
 
@@ -20,10 +20,10 @@
 
     Years.prototype.changeTable = function(select) {
       var year = select.options[select.selectedIndex].value;
-      var tables = document.querySelectorAll('.js-wpkpid-years-table');
+      var tables = document.querySelectorAll('.js-wpkpidb-years-table');
 
       _.forEach(tables, function(table) {
-        if(table.id === 'js-wpkpid-years-table-' + year) {
+        if(table.id === 'js-wpkpidb-years-table-' + year) {
           table.style.display = 'block';
         } else {
           table.style.display = 'none';

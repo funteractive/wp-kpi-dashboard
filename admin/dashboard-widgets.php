@@ -33,9 +33,10 @@ class WpKpiDashboard_Widgets
    * Create the function to output the contents of our Dashboard Widget.
    */
   public function init_widget() {
+    $html = $this->get_select_period_html();
 
     $kpi = $this->get_pageview_kpi();
-    $html = $this->get_kpi_block_html( $kpi, 'Pageview' );
+    $html .= $this->get_kpi_block_html( $kpi, 'Pageview' );
 
     echo $html;
   }
@@ -51,6 +52,19 @@ class WpKpiDashboard_Widgets
 EOL;
 
     $html = apply_filters( 'wpkpidb_dashboard_block_html', $html );
+    return $html;
+  }
+
+  private function get_select_period_html() {
+    $html = <<<EOL
+<select>
+  <option value="Daily">Daily</option>
+  <option value="Monthly">Monthly</option>
+  <option value="Yearly">Yearly</option>
+</select>
+EOL;
+
+    $html = apply_filters( 'wpkpidb_dashboard_period_select_html', $html );
     return $html;
   }
 

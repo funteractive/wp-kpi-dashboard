@@ -34,7 +34,7 @@ $default_year = date( 'Y' );
 <div class="wrap">
   <h2><?php $helper->e( 'WP KPI Dashboard' ); ?></h2>
 
-  <select name="year" id="js-wpkpid-years-select">
+  <select name="year" id="js-wpkpidb-years-select">
     <?php for( $year = $start_year; $year <= $end_year; $year++ ):
       $selected = '';
       if( $year == $default_year )
@@ -48,7 +48,7 @@ $default_year = date( 'Y' );
 
   <form action="<?php echo admin_url( 'options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN ); ?>" method="POST">
     <?php for( $year = $start_year; $year <= $end_year; $year++ ): ?>
-      <table class="form-table js-wpkpid-years-table" id="js-wpkpid-years-table-<?php echo esc_attr( $year ); ?>">
+      <table class="form-table js-wpkpidb-years-table" id="js-wpkpidb-years-table-<?php echo esc_attr( $year ); ?>">
         <tbody>
         <?php for( $month = 1; $month <= 12; $month++ ):
           if( isset( $datas ) && isset( $datas[$year] ) ) {
