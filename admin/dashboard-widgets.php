@@ -8,6 +8,8 @@ if ( !defined( 'ABSPATH' ) )
 class WpKpiDashboard_Widgets
 {
 
+  protected $period_name = 'wpkpidb_period';
+
   public function __construct() {
     // include helper
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
@@ -33,9 +35,11 @@ class WpKpiDashboard_Widgets
    * Create the function to output the contents of our Dashboard Widget.
    */
   public function init_widget() {
-    $html = $this->get_select_period_html();
+    $period = $this->get_period();
 
-    $kpi = $this->get_pageview_kpi();
+    $html = $this->get_select_period_html( $period );
+
+    $kpi = $this->get_pageview_kpi( $period );
     $html .= $this->get_kpi_block_html( $kpi, 'Pageview' );
 
     echo $html;
@@ -55,20 +59,30 @@ EOL;
     return $html;
   }
 
-  private function get_select_period_html() {
+  private function get_select_period_html( $period ) {
+    $period_arr = [ 'Daily', 'Monthly', 'Yearly' ];
+    $options = '';
+    foreach( $period_arr as $value ) {
+      if( $period === $value ) {
+        $selected = ' selected';
+      } else {
+        $selected = '';
+      }
+      $options .= sprintf( '<option value="%s"%s>%s</option>', $value, $selected, $value );
+    }
     $html = <<<EOL
-<select>
-  <option value="Daily">Daily</option>
-  <option value="Monthly">Monthly</option>
-  <option value="Yearly">Yearly</option>
-</select>
+<form id="js-wpkpidb-db-form" action ="" method="POST">
+  <select id="js-wpkpidb-db-period-select" name="{$this->period_name}">
+    {$options}
+  </select>
+</form>
 EOL;
 
     $html = apply_filters( 'wpkpidb_dashboard_period_select_html', $html );
     return $html;
   }
 
-  private function get_pageview_kpi() {
+  private function get_pageview_kpi( $period ) {
     $page_view_kpi = $this->pageview->get_kpi();
     $year = date( 'Y' );
     $month = date( 'n' );
@@ -77,4 +91,15 @@ EOL;
 
     return $show_kpi;
   }
+
+  private function get_period() {
+    if( isset( $_POST[$this->period_name] ) && $_POST[$this->period_name] ) {
+      $period = esc_html( $_POST[$this->period_name] );
+    } else {
+      $period = 'Monthly';
+    }
+
+    return $period;
+  }
+
 }

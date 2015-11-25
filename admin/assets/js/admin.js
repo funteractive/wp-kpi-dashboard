@@ -32,6 +32,29 @@
     };
 
     new Years();
+
+
+    var DashboardForm = function() {
+      this.form = document.getElementById('js-wpkpidb-db-form');
+      this.select = document.getElementById('js-wpkpidb-db-period-select');
+      if(!this.form || !this.select)
+        return false;
+
+      this.setEvents();
+    };
+
+    DashboardForm.prototype.setEvents = function() {
+      var self = this;
+      this.select.addEventListener('change', function(e) {
+        self.submit();
+      });
+    };
+
+    DashboardForm.prototype.submit = function() {
+      this.form.submit();
+    };
+
+    new DashboardForm();
   };
 
 })();

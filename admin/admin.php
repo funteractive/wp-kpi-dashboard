@@ -51,7 +51,7 @@ class WpKpiDashboard_Admin
    * Load scripts for admin.
    */
   public function admin_script() {
-    if( isset( $_GET['page'] ) && $_GET['page'] == WP_KPI_DASHBOARD_DOMAIN ) {
+    if( is_admin() ) {
       wp_enqueue_script( 'wp_kpi_dashboard_lodash', WP_KPI_DASHBOARD_URL . 'bower_components/lodash/lodash.min.js' );
       wp_enqueue_script( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'admin/assets/js/admin.js' );
     }
