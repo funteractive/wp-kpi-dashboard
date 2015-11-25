@@ -50,6 +50,7 @@ class WpKpiDashboard_Widgets
 </div>
 EOL;
 
+    $html = apply_filters( 'wpkpidb_dashboard_block_html', $html );
     return $html;
   }
 
