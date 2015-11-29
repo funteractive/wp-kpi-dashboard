@@ -31,12 +31,20 @@ class WpKpiDashboard_Pageview
 
   protected $option_name = 'wp_kpi_dashboard_pv_kpi';
 
+  /**
+   * WpKpiDashboard_Pageview constructor.
+   */
   public function __construct() {
     // include helper
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
   }
 
+  /**
+   * Be used in templates.
+   *
+   * @return bool|mixed
+   */
   public function template_setup() {
     // When save
     if( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], $this->save_action ) ) {
@@ -44,13 +52,24 @@ class WpKpiDashboard_Pageview
     }
 
     // return default data
-    return $this->get_option( $this->option_name );
+    return $this->get_kpi( $this->option_name );
   }
 
+  /**
+   * Return option value.
+   *
+   * @return bool|mixed
+   */
   public function get_kpi() {
     return $this->get_option( $this->option_name );
   }
 
+  /**
+   * Save value into options table.
+   *
+   * @param $option_name
+   * @param $value
+   */
   private function save_option( $option_name, $value ) {
     if( get_option( $option_name ) ) {
       update_option( $option_name, serialize( $value ) );
@@ -59,6 +78,12 @@ class WpKpiDashboard_Pageview
     }
   }
 
+  /**
+   * Get value from options table.
+   *
+   * @param $option_name
+   * @return bool|mixed
+   */
   private function get_option( $option_name ) {
     if( $value = get_option( $option_name ) ) {
       return unserialize( $value );
@@ -67,6 +92,12 @@ class WpKpiDashboard_Pageview
     }
   }
 
+  /**
+   * Update value into options table.
+   *
+   * @param $option_name
+   * @return bool
+   */
   private function update_option( $option_name ) {
     if( !isset( $_POST['pv_kpi'] ) || !is_array( $_POST['pv_kpi'] ) )
       return false;
