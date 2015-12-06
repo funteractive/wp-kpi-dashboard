@@ -8,6 +8,10 @@ if ( !defined( 'ABSPATH' ) )
 require_once( WP_KPI_DASHBOARD_DIR . 'admin/admin.php' );
 $admin = new WpKpiDashboard_Admin();
 
+// Include Google Class
+require_once( WP_KPI_DASHBOARD_DIR . 'app/auth/google.php' );
+$google = new WpKpiDashboard_Google();
+
 // Include Pageview Class
 require_once( WP_KPI_DASHBOARD_DIR . 'app/services/pageview.php' );
 $pageview = new WpKpiDashboard_Pageview();
@@ -17,7 +21,8 @@ require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
 $helper = new WpKpiDashboard_Helper();
 
 // setup
-$datas = $pageview->template_setup();
+$google_datas = $google->template_setup();
+$pageview_datas = $pageview->template_setup();
 
 // months name
 $months_name = $pageview->months_name;
@@ -58,7 +63,8 @@ $default_year = date( 'Y' );
     </table>
     <p class="submit">
       <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
-      <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php $helper->e( 'Get token' ); ?>">
+      <input type="submit" name="reset_google" class="button button-secondary" value="<?php $helper->e( 'Clear Authorization' ); ?>" />
+      <input type="submit" name="submit_google" id="submit" class="button button-primary" value="<?php $helper->e( 'Get token' ); ?>">
     </p>
   </form>
   <hr>
@@ -80,8 +86,8 @@ $default_year = date( 'Y' );
       <table class="form-table js-wpkpidb-years-table" id="js-wpkpidb-years-table-<?php echo esc_attr( $year ); ?>">
         <tbody>
         <?php for( $month = 1; $month <= 12; $month++ ):
-          if( isset( $datas ) && isset( $datas[$year] ) ) {
-            $value = $datas[$year][$month];
+          if( isset( $pageview_datas ) && isset( $pageview_datas[$year] ) ) {
+            $value = $pageview_datas[$year][$month];
           } else {
             $value = '';
           }

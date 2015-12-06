@@ -58,6 +58,11 @@ class WpKpiDashboard
       define( 'WP_KPI_DASHBOARD_DOMAIN', 'wp-kpi-dashboard' );
     }
 
+    // Plugin Prefix
+    if( !defined( 'WP_KPI_DASHBOARD_PREFIX' ) ) {
+      define( 'WP_KPI_DASHBOARD_PREFIX', 'wpkpidb_' );
+    }
+
     // Autoloader
     require_once ( WP_KPI_DASHBOARD_DIR . 'vendor/autoload.php' );
 
