@@ -34,6 +34,35 @@ $default_year = date( 'Y' );
 <div class="wrap">
   <h2><?php $helper->e( 'WP KPI Dashboard' ); ?></h2>
 
+  <h3><?php $helper->e( 'Google Analytics Settings' ); ?></h3>
+  <form action="<?php echo admin_url( 'options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN ); ?>" method="POST">
+    <table class="form-table">
+      <tbody>
+      <tr>
+        <th><?php $helper->e( 'Client ID' ); ?></th>
+        <td>
+          <input type="text" class="regular-text" name="ga_client_id">
+        </td>
+      </tr>
+      <tr>
+        <th><?php $helper->e( 'Consumer secret key' ); ?></th>
+        <td>
+          <input type="text" class="regular-text" name="ga_secret">
+        </td>
+      </tr>
+      <tr>
+        <th><?php $helper->e( 'Token' ); ?></th>
+        <td><pre></pre></td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="submit">
+      <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
+      <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php $helper->e( 'Get token' ); ?>">
+    </p>
+  </form>
+  <hr>
+  <h3><?php $helper->e( 'Page View Settings' ); ?></h3>
   <select name="year" id="js-wpkpidb-years-select">
     <?php for( $year = $start_year; $year <= $end_year; $year++ ):
       $selected = '';
