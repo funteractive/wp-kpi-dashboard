@@ -18,7 +18,10 @@ class WpKpiDashboard_Google
   public function template_setup() {
     $this->setup();
 
+    $protocol = empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://';
+    $data['redirect_uris'] = $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN;
 
+    return $data;
   }
 
   private function setup() {

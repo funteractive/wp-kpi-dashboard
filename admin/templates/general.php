@@ -46,13 +46,19 @@ $default_year = date( 'Y' );
       <tr>
         <th><?php $helper->e( 'Client ID' ); ?></th>
         <td>
-          <input type="text" class="regular-text" name="ga_client_id">
+          <input type="text" class="regular-text" name="client_id">
         </td>
       </tr>
       <tr>
         <th><?php $helper->e( 'Consumer secret key' ); ?></th>
         <td>
-          <input type="text" class="regular-text" name="ga_secret">
+          <input type="text" class="regular-text" name="client_secret">
+        </td>
+      </tr>
+      <tr>
+        <th><?php $helper->e( 'Redirect URI' ); ?></th>
+        <td>
+          <input type="text" class="regular-text" name="redirect_uris" value="<?php echo $google_datas['redirect_uris']; ?>" readonly>
         </td>
       </tr>
       <tr>
