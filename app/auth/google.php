@@ -13,11 +13,15 @@ class WpKpiDashboard_Google
     // Include helper class.
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
+
+    $this->setup();
   }
 
   public function template_setup() {
-    $this->setup();
-
+    $data = [];
+    foreach( $this->secrets_key as $key ) {
+      $data[$key] = $this->helper->get_request_or_option( $key );
+    }
     $protocol = empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://';
     $data['redirect_uris'] = $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN;
 
@@ -90,7 +94,7 @@ class WpKpiDashboard_Google
 
   private function redirect_to_auth_url() {
     $authUrl = $this->client->createAuthUrl();
-    wp_redirect( $authUrl );
+    header( "Location: $authUrl", true, '302' );
   }
 
   private function authenticate( $code ) {

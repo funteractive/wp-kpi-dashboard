@@ -47,4 +47,12 @@ class WpKpiDashboard_Helper
       add_option( $key, serialize( $value ) );
     }
   }
+
+  public function get_checked_value( $value ) {
+    if( isset( $value ) ) {
+      return $value;
+    } else {
+      return false;
+    }
+  }
 }

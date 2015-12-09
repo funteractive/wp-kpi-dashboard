@@ -18,6 +18,10 @@ class WpKpiDashboard_Admin
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
 
+    // include auth
+    require_once( WP_KPI_DASHBOARD_DIR . 'app/auth/google.php' );
+    $this->google = new WpKpiDashboard_Google();
+
     // include services
     require_once( WP_KPI_DASHBOARD_DIR . 'app/services/pageview.php' );
     $this->pageview = new WpKpiDashboard_Pageview();
