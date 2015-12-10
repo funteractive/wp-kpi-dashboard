@@ -102,7 +102,7 @@ class WpKpiDashboard_Google
     try {
       $access_token = $this->client->getAccessToken();
       if( $access_token ) {
-        $this->save_option( 'token', $access_token );
+        $this->helper->save_option( WP_KPI_DASHBOARD_PREFIX . 'token', $access_token );
         $_SESSION['access_token'] = $access_token;
       }
     } catch( Google_Exception $e ) {
@@ -115,7 +115,7 @@ class WpKpiDashboard_Google
    * @return bool
    */
   private function refresh() {
-    $token = $this->helper->get_option( 'token' );
+    $token = $this->helper->get_option( WP_KPI_DASHBOARD_PREFIX . 'token' );
     if( !isset( $token['refresh_token'] ) || !$token['refresh_token'] ) {
       return false;
     }
