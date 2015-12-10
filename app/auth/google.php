@@ -13,8 +13,6 @@ class WpKpiDashboard_Google
     // Include helper class.
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
-
-    $this->setup();
   }
 
   public function template_setup() {
@@ -28,7 +26,7 @@ class WpKpiDashboard_Google
     return $data;
   }
 
-  private function setup() {
+  public function setup() {
     $json = $this->get_secrets_json();
     if( $json ) {
       $this->set_client( $json );

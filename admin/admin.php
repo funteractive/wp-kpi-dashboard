@@ -21,6 +21,7 @@ class WpKpiDashboard_Admin
     // include auth
     require_once( WP_KPI_DASHBOARD_DIR . 'app/auth/google.php' );
     $this->google = new WpKpiDashboard_Google();
+    $this->google->setup();
 
     // include services
     require_once( WP_KPI_DASHBOARD_DIR . 'app/services/pageview.php' );
