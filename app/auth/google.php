@@ -86,7 +86,7 @@ class WpKpiDashboard_Google
 
     $this->client = new Google_Client();
     $this->client->setAuthConfig( $json );
-    //$this->client->setRedirectUri( $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=wp-kpi-dashboard' );
+    $this->client->setRedirectUri( $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN );
     $this->client->setScopes( Google_Service_Analytics::ANALYTICS_READONLY );
     $this->client->setAccessType( 'offline' );
     $this->client->setApprovalPrompt( 'force' );
