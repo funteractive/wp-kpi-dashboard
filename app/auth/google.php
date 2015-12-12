@@ -17,9 +17,8 @@ class WpKpiDashboard_Google
 
   public function template_setup() {
     if( $this->helper->get_request( 'reset_google' ) ) {
-      return false;
+      $this->reset();
     }
-
     $data = [];
     foreach( $this->secrets_key as $key ) {
       $data[$key] = $this->helper->get_request_or_option( $key );
@@ -31,20 +30,20 @@ class WpKpiDashboard_Google
   }
 
   public function setup() {
+    $json = $this->get_secrets_json();
+    if( $json ) {
+      $this->set_client( $json );
+      if( $this->helper->get_request( 'submit_google' ) ) {
+        $this->redirect_to_auth_url();
+      } elseif( isset( $_GET['code'] ) ) {
+        $this->authenticate( $_GET['code'] );
+      }
+    }
+
     // When reset.
     if( $this->helper->get_request( 'reset_google' ) ) {
       $this->reset();
     } else {
-      $json = $this->get_secrets_json();
-      if( $json ) {
-        $this->set_client( $json );
-        if( $this->helper->get_request( 'submit_google' ) ) {
-          $this->redirect_to_auth_url();
-        } elseif( isset( $_GET['code'] ) ) {
-          $this->authenticate( $_GET['code'] );
-        }
-      }
-
       foreach( $this->secrets_key as $key ) {
         $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
         if( isset( $_POST[$key] ) && $_POST[$key] ) {
