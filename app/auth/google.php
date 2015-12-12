@@ -75,6 +75,7 @@ class WpKpiDashboard_Google
     ];
 
     $json = json_encode( $array );
+    $json = str_replace( '\/', '/', $json );
 
     return $json;
   }
