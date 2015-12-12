@@ -38,7 +38,7 @@ class WpKpiDashboard_Google
     }
 
     // When reset.
-    if( $this->helper->get_request( 'reset' ) ) {
+    if( $this->helper->get_request( 'reset_google' ) ) {
       $this->reset();
     } else {
       foreach( $this->secrets_key as $key ) {
@@ -128,6 +128,11 @@ class WpKpiDashboard_Google
   private function reset() {
     // Revoke access token.
     $this->client->revokeToken();
+
+    foreach( $this->secrets_key as $key ) {
+      $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
+      $this->helper->delete_option( $option_name, $_POST[$key] );
+    }
 
     // Unset access token in session.
     if( isset( $_SESSION['access_token'] ) )

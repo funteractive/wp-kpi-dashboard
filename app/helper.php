@@ -48,6 +48,10 @@ class WpKpiDashboard_Helper
     }
   }
 
+  public function delete_option( $key ) {
+    delete_option( $key );
+  }
+
   public function get_checked_value( $value ) {
     if( isset( $value ) ) {
       return $value;
