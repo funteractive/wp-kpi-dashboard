@@ -34,7 +34,7 @@ class WpKpiDashboard_Helper
 
   public function get_option( $key ) {
     if( $option = get_option( WP_KPI_DASHBOARD_PREFIX . $key ) ) {
-      return esc_html( unserialize( $option ) );
+      return esc_html( $option );
     } else {
       return false;
     }
@@ -42,21 +42,13 @@ class WpKpiDashboard_Helper
 
   public function save_option( $key, $value ) {
     if( get_option( $key ) ) {
-      update_option( $key, serialize( $value ) );
+      update_option( $key, $value );
     } else {
-      add_option( $key, serialize( $value ) );
+      add_option( $key, $value );
     }
   }
 
   public function delete_option( $key ) {
     delete_option( $key );
-  }
-
-  public function get_checked_value( $value ) {
-    if( isset( $value ) ) {
-      return $value;
-    } else {
-      return false;
-    }
   }
 }

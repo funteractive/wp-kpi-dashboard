@@ -7,7 +7,7 @@ if ( !defined( 'ABSPATH' ) )
 class WpKpiDashboard_Google
 {
 
-  protected $secrets_key = [ 'client_id', 'client_secret', 'redirect_uris' ];
+  protected $secrets_key = [ 'client_id', 'client_secret' ];
 
   public function __construct() {
     // Include helper class.
@@ -16,15 +16,14 @@ class WpKpiDashboard_Google
   }
 
   public function template_setup() {
-    if( $this->helper->get_request( 'reset_google' ) ) {
-      return false;
-    }
     $data = [];
+    $data['redirect_uris'] = $this->get_redirect_uri();
+    if( $this->helper->get_request( 'reset_google' ) ) {
+      return $data;
+    }
     foreach( $this->secrets_key as $key ) {
       $data[$key] = $this->helper->get_request_or_option( $key );
     }
-    $protocol = empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://';
-    $data['redirect_uris'] = $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN;
 
     return $data;
   }
@@ -53,19 +52,24 @@ class WpKpiDashboard_Google
     }
   }
 
+  private function get_redirect_uri() {
+    $protocol = empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://';
+    return $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN;
+  }
+
   private function get_secrets_json() {
     foreach( $this->secrets_key as $key ) {
       ${$key} = $this->helper->get_request_or_option( $key );
     }
-    if( $client_id && $client_secret && $redirect_uris ) {
-      $json = $this->create_secrets_json( $client_id, $client_secret, $redirect_uris );
+    if( $client_id && $client_secret ) {
+      $json = $this->create_secrets_json( $client_id, $client_secret );
       return $json;
     } else {
       return false;
     }
   }
 
-  private function create_secrets_json( $client_id, $client_secret, $redirect_uris ) {
+  private function create_secrets_json( $client_id, $client_secret ) {
     $array = [
       'web' => [
         'client_id'                   => $client_id,
@@ -73,7 +77,7 @@ class WpKpiDashboard_Google
         'token_uri'                   => 'https://accounts.google.com/o/oauth2/token',
         'auth_provider_x509_cert_url' => 'https://www.googleapis.com/oauth2/v1/certs',
         'client_secret'               => $client_secret,
-        'redirect_uris'               => [ $redirect_uris ],
+        'redirect_uris'               => [ $this->get_redirect_uri() ],
       ]
     ];
 
@@ -138,7 +142,6 @@ class WpKpiDashboard_Google
     }
 
     // Unset access token in session.
-    if( isset( $_SESSION['access_token'] ) )
-      unset( $_SESSION['access_token'] );
+    if( isset( $_SESSION['access_token'] ) ) unset( $_SESSION['access_token'] );
   }
 }

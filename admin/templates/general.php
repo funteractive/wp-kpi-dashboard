@@ -20,6 +20,11 @@ $helper = new WpKpiDashboard_Helper();
 $google_datas = $google->template_setup();
 $pageview_datas = $pageview->template_setup();
 
+$client_id = isset( $google_datas['client_id'] ) ? $google_datas['client_id'] : false;
+$client_secret = isset( $google_datas['client_secret'] ) ? $google_datas['client_secret'] : false;
+$redirect_uris = isset( $google_datas['redirect_uris'] ) ? $google_datas['redirect_uris'] : false;
+$access_token = isset( $_SESSION['access_token'] ) ? $_SESSION['access_token'] : false;
+
 // months name
 $months_name = $pageview->months_name;
 
@@ -42,19 +47,19 @@ $default_year = date( 'Y' );
       <tr>
         <th><?php $helper->e( 'Client ID' ); ?></th>
         <td>
-          <input type="text" class="regular-text" name="client_id" value="<?php echo $helper->get_checked_value( $google_datas['client_id'] ); ?>">
+          <input type="text" class="regular-text" name="client_id" value="<?php echo esc_html( $client_id ); ?>">
         </td>
       </tr>
       <tr>
         <th><?php $helper->e( 'Consumer secret key' ); ?></th>
         <td>
-          <input type="text" class="regular-text" name="client_secret" value="<?php echo $helper->get_checked_value( $google_datas['client_secret'] ); ?>">
+          <input type="text" class="regular-text" name="client_secret" value="<?php echo esc_html( $client_secret ); ?>">
         </td>
       </tr>
       <tr>
         <th><?php $helper->e( 'Redirect URI' ); ?></th>
         <td>
-          <input type="text" class="regular-text" name="redirect_uris" value="<?php echo $helper->get_checked_value( $google_datas['redirect_uris'] ); ?>" readonly>
+          <input type="text" class="regular-text" name="redirect_uris" value="<?php echo esc_html( $redirect_uris ); ?>" readonly>
         </td>
       </tr>
       <tr>
