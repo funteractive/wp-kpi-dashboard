@@ -4,9 +4,9 @@
 if ( !defined( 'ABSPATH' ) )
   exit();
 
-// Include Admin Class
-require_once( WP_KPI_DASHBOARD_DIR . 'admin/admin.php' );
-$admin = new WpKpiDashboard_Admin();
+// Include Google Class
+require_once( WP_KPI_DASHBOARD_DIR . 'app/auth/google.php' );
+$google = new WpKpiDashboard_Google();
 
 // Include Pageview Class
 require_once( WP_KPI_DASHBOARD_DIR . 'app/services/pageview.php' );
@@ -17,7 +17,13 @@ require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
 $helper = new WpKpiDashboard_Helper();
 
 // setup
-$datas = $pageview->template_setup();
+$google_datas = $google->template_setup();
+$pageview_datas = $pageview->template_setup();
+
+$client_id = isset( $google_datas['client_id'] ) ? $google_datas['client_id'] : false;
+$client_secret = isset( $google_datas['client_secret'] ) ? $google_datas['client_secret'] : false;
+$redirect_uris = isset( $google_datas['redirect_uris'] ) ? $google_datas['redirect_uris'] : false;
+$access_token = isset( $_SESSION['access_token'] ) ? $_SESSION['access_token'] : false;
 
 // months name
 $months_name = $pageview->months_name;
@@ -34,6 +40,42 @@ $default_year = date( 'Y' );
 <div class="wrap">
   <h2><?php $helper->e( 'WP KPI Dashboard' ); ?></h2>
 
+  <h3><?php $helper->e( 'Google Analytics Settings' ); ?></h3>
+  <form action="<?php echo admin_url( 'options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN ); ?>" method="POST">
+    <table class="form-table">
+      <tbody>
+      <tr>
+        <th><?php $helper->e( 'Client ID' ); ?></th>
+        <td>
+          <input type="text" class="regular-text" name="client_id" value="<?php echo esc_html( $client_id ); ?>">
+        </td>
+      </tr>
+      <tr>
+        <th><?php $helper->e( 'Consumer secret key' ); ?></th>
+        <td>
+          <input type="text" class="regular-text" name="client_secret" value="<?php echo esc_html( $client_secret ); ?>">
+        </td>
+      </tr>
+      <tr>
+        <th><?php $helper->e( 'Redirect URI' ); ?></th>
+        <td>
+          <input type="text" class="regular-text" name="redirect_uris" value="<?php echo esc_html( $redirect_uris ); ?>" readonly>
+        </td>
+      </tr>
+      <tr>
+        <th><?php $helper->e( 'Token' ); ?></th>
+        <td><pre><?php echo esc_html( $access_token ); ?></pre></td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="submit">
+      <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
+      <input type="submit" name="reset_google" class="button button-secondary" value="<?php $helper->e( 'Clear Authorization' ); ?>" />
+      <input type="submit" name="submit_google" id="submit" class="button button-primary" value="<?php $helper->e( 'Get token' ); ?>">
+    </p>
+  </form>
+  <hr>
+  <h3><?php $helper->e( 'Page View Settings' ); ?></h3>
   <select name="year" id="js-wpkpidb-years-select">
     <?php for( $year = $start_year; $year <= $end_year; $year++ ):
       $selected = '';
@@ -51,8 +93,8 @@ $default_year = date( 'Y' );
       <table class="form-table js-wpkpidb-years-table" id="js-wpkpidb-years-table-<?php echo esc_attr( $year ); ?>">
         <tbody>
         <?php for( $month = 1; $month <= 12; $month++ ):
-          if( isset( $datas ) && isset( $datas[$year] ) ) {
-            $value = $datas[$year][$month];
+          if( isset( $pageview_datas ) && isset( $pageview_datas[$year] ) ) {
+            $value = $pageview_datas[$year][$month];
           } else {
             $value = '';
           }
