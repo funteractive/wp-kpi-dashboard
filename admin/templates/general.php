@@ -64,7 +64,7 @@ $default_year = date( 'Y' );
       </tr>
       <tr>
         <th><?php $helper->e( 'Token' ); ?></th>
-        <td><pre></pre></td>
+        <td><pre><?php echo esc_html( $access_token ); ?></pre></td>
       </tr>
       </tbody>
     </table>
