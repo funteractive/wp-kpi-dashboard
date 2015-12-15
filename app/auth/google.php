@@ -17,7 +17,7 @@ class WpKpiDashboard_Google
 
   public function template_setup() {
     if( $this->helper->get_request( 'reset_google' ) ) {
-      $this->reset();
+      return false;
     }
     $data = [];
     foreach( $this->secrets_key as $key ) {
@@ -38,16 +38,16 @@ class WpKpiDashboard_Google
       } elseif( isset( $_GET['code'] ) ) {
         $this->authenticate( $_GET['code'] );
       }
-    }
 
-    // When reset.
-    if( $this->helper->get_request( 'reset_google' ) ) {
-      $this->reset();
-    } else {
-      foreach( $this->secrets_key as $key ) {
-        $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
-        if( isset( $_POST[$key] ) && $_POST[$key] ) {
-          $this->helper->save_option( $option_name, $_POST[$key] );
+      // When reset.
+      if( $this->helper->get_request( 'reset_google' ) ) {
+        $this->reset();
+      } else {
+        foreach( $this->secrets_key as $key ) {
+          $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
+          if( isset( $_POST[$key] ) && $_POST[$key] ) {
+            $this->helper->save_option( $option_name, $_POST[$key] );
+          }
         }
       }
     }
@@ -73,7 +73,7 @@ class WpKpiDashboard_Google
         'token_uri'                   => 'https://accounts.google.com/o/oauth2/token',
         'auth_provider_x509_cert_url' => 'https://www.googleapis.com/oauth2/v1/certs',
         'client_secret'               => $client_secret,
-        'redirect_uris'               => $redirect_uris,
+        'redirect_uris'               => [ $redirect_uris ],
       ]
     ];
 

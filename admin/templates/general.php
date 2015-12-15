@@ -4,10 +4,6 @@
 if ( !defined( 'ABSPATH' ) )
   exit();
 
-// Include Admin Class
-require_once( WP_KPI_DASHBOARD_DIR . 'admin/admin.php' );
-$admin = new WpKpiDashboard_Admin();
-
 // Include Google Class
 require_once( WP_KPI_DASHBOARD_DIR . 'app/auth/google.php' );
 $google = new WpKpiDashboard_Google();
