@@ -42,11 +42,9 @@ class WpKpiDashboard_Google
 
       // Get Google Analytics accounts.
       $profile_id = $this->getFirstprofileId( $this->analytics );
-      return $this->analytics->data_ga->get(
-        'ga:' . $profile_id,
-        '7daysAgo',
-        'today',
-        'ga:sessions');
+      $results = $this->get_results( $this->analytics, $profile_id );
+
+      return $this->print_results( $results );
     } else {
       return false;
     }
@@ -217,6 +215,36 @@ class WpKpiDashboard_Google
       }
     } else {
       throw new Exception('No accounts found for this user.');
+    }
+  }
+
+  private function get_results( $analytics, $profile_id ) {
+    return $analytics->data_ga->get(
+      'ga:' . $profile_id,
+      '7daysAgo',
+      'today',
+      'ga:sessions');
+  }
+
+  private function print_results( $results ) {
+    // Parses the response from the Core Reporting API and prints
+    // the profile name and total sessions.
+    if (count($results->getRows()) > 0) {
+
+      // Get the profile name.
+      $profileName = $results->getProfileInfo()->getProfileName();
+
+      // Get the entry for the first entry in the first row.
+      $rows = $results->getRows();
+      $sessions = $rows[0][0];
+
+      // Print the results.
+      $text = "First view (profile) found: $profileName\n"
+        . "Total sessions: $sessions\n";
+
+      return $text;
+    } else {
+      return false;
     }
   }
 }
