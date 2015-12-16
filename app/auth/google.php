@@ -28,6 +28,23 @@ class WpKpiDashboard_Google
     return $data;
   }
 
+  public function template_get_gadata() {
+    if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
+      try {
+        $this->client->setAccessToken($_SESSION['access_token']);
+        $this->service = new Google_Service_Analytics($this->client);
+      } catch (Google_Exception $e) {
+        $this->refresh();
+        echo $e->getMessage();
+      }
+
+      // Get Google Analytics accounts.
+      $accounts = $this->service->management_accounts->listManagementAccounts();
+    } else {
+      return false;
+    }
+  }
+
   public function setup() {
     $json = $this->get_secrets_json();
     if( $json ) {
@@ -87,6 +104,9 @@ class WpKpiDashboard_Google
     return $json;
   }
 
+  /**
+   * @param $json
+   */
   private function set_client( $json ) {
     $protocol = empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://';
 
@@ -98,11 +118,17 @@ class WpKpiDashboard_Google
     $this->client->setApprovalPrompt( 'force' );
   }
 
+  /**
+   *
+   */
   private function redirect_to_auth_url() {
     $authUrl = $this->client->createAuthUrl();
     header( "Location: $authUrl", true, '302' );
   }
 
+  /**
+   * @param $code
+   */
   private function authenticate( $code ) {
     $this->client->authenticate( $code );
     try {

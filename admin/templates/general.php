@@ -18,6 +18,7 @@ $helper = new WpKpiDashboard_Helper();
 
 // setup
 $google_datas = $google->template_setup();
+$analytics_datas = $google->template_get_gadata();
 $pageview_datas = $pageview->template_setup();
 
 $client_id = isset( $google_datas['client_id'] ) ? $google_datas['client_id'] : false;
