@@ -144,7 +144,7 @@ class WpKpiDashboard_Google
     }
 
     $redirect_uri = $this->get_redirect_uri();
-    wp_redirect( $redirect_uri );
+    header( "Location: $redirect_uri", true, '302' );
   }
 
   /**
