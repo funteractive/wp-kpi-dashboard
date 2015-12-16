@@ -141,10 +141,10 @@ class WpKpiDashboard_Google
       }
     } catch( Google_Exception $e ) {
       echo $e->getMessage();
-    } finally {
-      $redirect_uri = $this->get_redirect_uri();
-      wp_redirect( $redirect_uri );
     }
+
+    $redirect_uri = $this->get_redirect_uri();
+    wp_redirect( $redirect_uri );
   }
 
   /**
