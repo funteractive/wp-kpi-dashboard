@@ -13,6 +13,8 @@ class WpKpiDashboard_Google
     // Include helper class.
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
+
+    $this->setup();
   }
 
   public function template_setup() {
