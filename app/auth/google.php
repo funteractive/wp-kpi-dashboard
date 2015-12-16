@@ -34,14 +34,19 @@ class WpKpiDashboard_Google
     if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
       try {
         $this->client->setAccessToken($_SESSION['access_token']);
-        $this->service = new Google_Service_Analytics($this->client);
+        $this->analytics = new Google_Service_Analytics($this->client);
       } catch (Google_Exception $e) {
         $this->refresh();
         echo $e->getMessage();
       }
 
       // Get Google Analytics accounts.
-      $accounts = $this->service->management_accounts->listManagementAccounts();
+      $profile_id = $this->getFirstprofileId( $this->analytics );
+      return $this->analytics->data_ga->get(
+        'ga:' . $profile_id,
+        '7daysAgo',
+        'today',
+        'ga:sessions');
     } else {
       return false;
     }
@@ -174,5 +179,44 @@ class WpKpiDashboard_Google
 
     // Unset access token in session.
     if( isset( $_SESSION['access_token'] ) ) unset( $_SESSION['access_token'] );
+  }
+
+  private function getFirstprofileId(&$analytics) {
+    // Get the user's first view (profile) ID.
+
+    // Get the list of accounts for the authorized user.
+    $accounts = $analytics->management_accounts->listManagementAccounts();
+
+    if (count($accounts->getItems()) > 0) {
+      $items = $accounts->getItems();
+      $firstAccountId = $items[0]->getId();
+
+      // Get the list of properties for the authorized user.
+      $properties = $analytics->management_webproperties
+        ->listManagementWebproperties($firstAccountId);
+
+      if (count($properties->getItems()) > 0) {
+        $items = $properties->getItems();
+        $firstPropertyId = $items[0]->getId();
+
+        // Get the list of views (profiles) for the authorized user.
+        $profiles = $analytics->management_profiles
+          ->listManagementProfiles($firstAccountId, $firstPropertyId);
+
+        if (count($profiles->getItems()) > 0) {
+          $items = $profiles->getItems();
+
+          // Return the first view (profile) ID.
+          return $items[0]->getId();
+
+        } else {
+          throw new Exception('No views (profiles) found for this user.');
+        }
+      } else {
+        throw new Exception('No properties found for this user.');
+      }
+    } else {
+      throw new Exception('No accounts found for this user.');
+    }
   }
 }
