@@ -27,7 +27,6 @@ class WpKpiDashboard_Google_Analytics
           'name' => $item->getName()
         ];
       }
-
       return $accounts;
     } else {
       return false;
