@@ -17,7 +17,7 @@ require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
 $helper = new WpKpiDashboard_Helper();
 
 // setup
-$google_datas = $google->template_setup();
+$google_datas = $google->template_get_google_data();
 $analytics_datas = $google->template_get_gadata();
 $pageview_datas = $pageview->template_setup();
 

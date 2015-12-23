@@ -4,6 +4,9 @@
 if ( !defined( 'ABSPATH' ) )
   exit();
 
+/**
+ * Class WpKpiDashboard_Google
+ */
 class WpKpiDashboard_Google
 {
 
@@ -17,7 +20,10 @@ class WpKpiDashboard_Google
     $this->setup();
   }
 
-  public function template_setup() {
+  /**
+   * @return array
+   */
+  public function template_get_google_data() {
     $data = [];
     $data['redirect_uris'] = $this->get_redirect_uri();
     if( $this->helper->get_request( 'reset_google' ) ) {
@@ -30,6 +36,10 @@ class WpKpiDashboard_Google
     return $data;
   }
 
+  /**
+   * @return bool|string
+   * @throws Exception
+   */
   public function template_get_gadata() {
     if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
       try {
@@ -50,7 +60,10 @@ class WpKpiDashboard_Google
     }
   }
 
-  public function setup() {
+  /**
+   *
+   */
+  private function setup() {
     $json = $this->get_secrets_json();
     if( $json ) {
       $this->set_client( $json );
@@ -74,6 +87,9 @@ class WpKpiDashboard_Google
     }
   }
 
+  /**
+   * @return string
+   */
   private function get_redirect_uri() {
     $protocol = empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://';
     return $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN;
