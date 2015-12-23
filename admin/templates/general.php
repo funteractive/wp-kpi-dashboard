@@ -85,7 +85,7 @@ $default_year = date( 'Y' );
         <th><?php $helper->e( 'Account Settings' ); ?></th>
         <td>
           <select name="ga_account">
-            <?php foreach( $analytics_datas['account'] as $account ): ?>
+            <?php foreach( $analytics_datas['accounts'] as $account ): ?>
               <option value="<?php echo esc_html( $account['id'] ); ?>"><?php echo esc_html( $account['name'] ); ?></option>
             <?php endforeach; ?>
           </select>
