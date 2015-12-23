@@ -76,6 +76,31 @@ $default_year = date( 'Y' );
     </p>
   </form>
   <hr>
+
+  <?php if( $analytics_datas ): ?>
+    <h3><?php $helper->e( 'Account Settings' ); ?></h3>
+    <table class="form-table">
+      <tbody>
+      <tr>
+        <th><?php $helper->e( 'Account Settings' ); ?></th>
+        <td>
+          <select name="ga_account">
+            <?php foreach( $analytics_datas['account'] as $account ): ?>
+              <option value="<?php echo esc_html( $account['id'] ); ?>"><?php echo esc_html( $account['name'] ); ?></option>
+            <?php endforeach; ?>
+          </select>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="submit">
+      <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
+      <input type="submit" name="reset_ga" class="button button-secondary" value="<?php $helper->e( 'Clear Account' ); ?>" />
+      <input type="submit" name="submit_ga" id="submit" class="button button-primary" value="<?php $helper->e( 'Save' ); ?>">
+    </p>
+    <hr>
+  <?php endif; ?>
+
   <h3><?php $helper->e( 'Page View Settings' ); ?></h3>
   <select name="year" id="js-wpkpidb-years-select">
     <?php for( $year = $start_year; $year <= $end_year; $year++ ):

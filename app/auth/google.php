@@ -62,7 +62,7 @@ class WpKpiDashboard_Google
       } else {
         $ga_accounts = $this->ga->get_ga_accounts( $this->analytics );
         if( $ga_accounts ) {
-          $data[accounts] = $ga_accounts;
+          $data['accounts'] = $ga_accounts;
         }
       }
 
