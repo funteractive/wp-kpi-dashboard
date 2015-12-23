@@ -17,6 +17,10 @@ class WpKpiDashboard_Google
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
 
+    // Include GA class.
+    require_once( WP_KPI_DASHBOARD_DIR . 'app/services/google-analytics.php' );
+    $this->ga = new WpKpiDashboard_Google_Analytics();
+
     $this->setup();
   }
 
@@ -50,11 +54,16 @@ class WpKpiDashboard_Google
         echo $e->getMessage();
       }
 
-      // Get Google Analytics accounts.
-      $profile_id = $this->getFirstprofileId( $this->analytics );
-      $results = $this->get_results( $this->analytics, $profile_id );
+      $ga_account = $this->helper->get_option( 'ga_account' );
+      if( $ga_account ) {
+        $ga_properties = $this->ga->get_ga_properties( $ga_account );
+      } else {
+        $ga_accounts = $this->ga->get_ga_accounts( $this->analytics );
+      }
+      //$profile_id = $this->getFirstprofileId( $this->analytics );
+      //$results = $this->get_results( $this->analytics, $profile_id );
 
-      return $this->print_results( $results );
+      //return $this->print_results( $results );
     } else {
       return false;
     }
