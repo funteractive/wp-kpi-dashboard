@@ -46,6 +46,8 @@ class WpKpiDashboard_Google
    */
   public function template_get_gadata() {
     if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
+      $data = [];
+
       try {
         $this->client->setAccessToken($_SESSION['access_token']);
         $this->analytics = new Google_Service_Analytics($this->client);
@@ -59,7 +61,12 @@ class WpKpiDashboard_Google
         $ga_properties = $this->ga->get_ga_properties( $ga_account );
       } else {
         $ga_accounts = $this->ga->get_ga_accounts( $this->analytics );
+        if( $ga_accounts ) {
+          $data[accounts] = $ga_accounts;
+        }
       }
+
+      return $data;
       //$profile_id = $this->getFirstprofileId( $this->analytics );
       //$results = $this->get_results( $this->analytics, $profile_id );
 
