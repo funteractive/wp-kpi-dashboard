@@ -22,7 +22,7 @@ class WpKpiDashboard_Google_Analytics
       $items = $raw_accounts->getItems();
       $accounts = [];
       foreach( $items as $item ) {
-        $array[] = [
+        $accounts[] = [
           'id' => $item->getId(),
           'name' => $item->getName()
         ];
