@@ -91,6 +91,7 @@ class WpKpiDashboard_Google
         $this->reset();
       } elseif( $this->helper->get_request( 'ajax_ga_account' ) ) {
         echo $this->ga->get_ga_properties_html( $_POST['ajax_ga_account'] );
+	exit();
       } else {
         foreach( $this->secrets_key as $key ) {
           $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
