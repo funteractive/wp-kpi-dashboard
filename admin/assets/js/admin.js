@@ -13,9 +13,11 @@
 
     GA.prototype.setEvents = function() {
       var self = this;
-      this.$select.addEventListener('change', function(e) {
-        self.properties(e.target);
-      });
+      if(this.$select) {
+        this.$select.addEventListener('change', function(e) {
+          self.properties(e.target);
+        });
+      }
     };
 
     GA.prototype.properties = function(target) {

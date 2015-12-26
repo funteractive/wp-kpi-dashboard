@@ -38,7 +38,7 @@ class WpKpiDashboard_Google_Analytics
     $properties = $this->get_ga_properties( $account_id );
   }
 
-  private function get_ga_properties( $account_id ) {
+  private function get_ga_properties( $analytics, $account_id ) {
     $raw_properties = $this->analytics->management_webproperties->listManagementWebproperties($account_id);
     if( count( $raw_properties->getItems() ) > 0 ) {
       $items = $raw_properties->getItems();
