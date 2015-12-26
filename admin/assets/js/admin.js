@@ -6,7 +6,7 @@
       this.$select = document.getElementById('js-wpkpidb-account-select');
       this.$properties = document.getElementById('js-wpkpidb-properties');
 
-      this.propertyUrl = './';
+      this.propertyUrl = '';
 
       this.setEvents();
     };
