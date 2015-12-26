@@ -33,10 +33,12 @@
       xmlHttpRequest.addEventListener('loadend', function() {
         if(xmlHttpRequest.status === 200) {
           var response = xmlHttpRequest.response;
+          console.log(response);
           return response;
         }
       });
       xmlHttpRequest.open('POST', this.propertyUrl, true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xmlHttpRequest.send('ajax_ga_account=' + account);
     };
 
