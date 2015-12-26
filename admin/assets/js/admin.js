@@ -38,7 +38,6 @@
       xmlHttpRequest.send('ajax_ga_account=' + account);
     };
 
-
     var Years = function() {
       this.$select = document.getElementById('js-wpkpidb-years-select');
       if(!this.$select)
