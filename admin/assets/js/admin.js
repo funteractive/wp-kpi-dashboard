@@ -7,6 +7,8 @@
       this.$properties = document.getElementById('js-wpkpidb-properties');
 
       this.propertyUrl = './';
+
+      this.setEvents();
     };
 
     GA.prototype.setEvents = function() {
@@ -37,6 +39,9 @@
       xmlHttpRequest.open('POST', this.propertyUrl, true);
       xmlHttpRequest.send('ajax_ga_account=' + account);
     };
+
+    new GA();
+
 
     var Years = function() {
       this.$select = document.getElementById('js-wpkpidb-years-select');
