@@ -38,7 +38,7 @@
         }
       });
       xmlHttpRequest.open('POST', this.propertyUrl, true);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xmlHttpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xmlHttpRequest.send('ajax_ga_account=' + account);
     };
 
