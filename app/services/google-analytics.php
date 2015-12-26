@@ -34,7 +34,25 @@ class WpKpiDashboard_Google_Analytics
     }
   }
 
-  public function get_ga_properties( $account_id ) {
+  public function get_ga_properties_html( $account_id ) {
+    $properties = $this->get_ga_properties( $account_id );
+  }
 
+  private function get_ga_properties( $account_id ) {
+    $raw_properties = $this->analytics->management_webproperties->listManagementWebproperties($account_id);
+    if( count( $raw_properties->getItems() ) > 0 ) {
+      $items = $raw_properties->getItems();
+      $properties = [];
+      foreach( $items as $item ) {
+        $properties[] = [
+          'id' => $item->getId(),
+          'name' => $item->getName()
+        ];
+      }
+
+      return $properties;
+    } else {
+      return false;
+    }
   }
 }

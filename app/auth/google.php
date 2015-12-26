@@ -21,7 +21,7 @@ class WpKpiDashboard_Google
     require_once( WP_KPI_DASHBOARD_DIR . 'app/services/google-analytics.php' );
     $this->ga = new WpKpiDashboard_Google_Analytics();
 
-    $this->setup();
+    $this->init();
   }
 
   /**
@@ -56,9 +56,9 @@ class WpKpiDashboard_Google
         echo $e->getMessage();
       }
 
-      $ga_account = $this->helper->get_option( 'ga_account' );
-      if( $ga_account ) {
-        $ga_properties = $this->ga->get_ga_properties( $ga_account );
+      $account_id = $this->helper->get_option( 'ga_account' );
+      if( $account_id ) {
+        $ga_properties = $this->ga->get_ga_properties_html( $account_id );
       } else {
         $ga_accounts = $this->ga->get_ga_accounts( $this->analytics );
         if( $ga_accounts ) {
@@ -79,19 +79,18 @@ class WpKpiDashboard_Google
   /**
    *
    */
-  private function setup() {
+  private function init() {
     $json = $this->get_secrets_json();
     if( $json ) {
       $this->set_client( $json );
       if( $this->helper->get_request( 'submit_google' ) ) {
         $this->redirect_to_auth_url();
       } elseif( isset( $_GET['code'] ) ) {
-        $this->authenticate( $_GET['code'] );
-      }
-
-      // When reset.
-      if( $this->helper->get_request( 'reset_google' ) ) {
+        $this->authenticate($_GET['code']);
+      } elseif( $this->helper->get_request( 'reset_google' ) ) {
         $this->reset();
+      } elseif( $this->helper->get_request( 'ajax_ga_account' ) ) {
+        echo $this->ga->get_ga_properties_html( $_POST['ajax_ga_account'] );
       } else {
         foreach( $this->secrets_key as $key ) {
           $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
