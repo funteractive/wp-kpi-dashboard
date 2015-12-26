@@ -82,14 +82,18 @@ $default_year = date( 'Y' );
     <table class="form-table">
       <tbody>
       <tr>
-        <th><?php $helper->e( 'Account Settings' ); ?></th>
+        <th><?php $helper->e( 'Account' ); ?></th>
         <td>
-          <select name="ga_account">
-            <?php foreach( $analytics_datas['account'] as $account ): ?>
+          <select name="ga_account" id="js-wpkpidb-account-select">
+            <?php foreach( $analytics_datas['accounts'] as $account ): ?>
               <option value="<?php echo esc_html( $account['id'] ); ?>"><?php echo esc_html( $account['name'] ); ?></option>
             <?php endforeach; ?>
           </select>
         </td>
+      </tr>
+      <tr>
+        <th><?php $helper->e( 'Property' ); ?></th>
+        <td id="js-wpkpidb-properties"></td>
       </tr>
       </tbody>
     </table>
