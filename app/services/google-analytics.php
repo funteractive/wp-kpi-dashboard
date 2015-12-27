@@ -10,12 +10,19 @@ if ( !defined( 'ABSPATH' ) )
 class WpKpiDashboard_Google_Analytics
 {
 
+  /**
+   * WpKpiDashboard_Google_Analytics constructor.
+   */
   public function __construct() {
     // Include helper class.
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
     $this->helper = new WpKpiDashboard_Helper();
   }
 
+  /**
+   * @param $analytics
+   * @return array|bool
+   */
   public function get_ga_accounts( $analytics ) {
     $raw_accounts = $analytics->management_accounts->listManagementAccounts();
     $ga_account = $this->helper->get_option( 'ga_account' );
@@ -42,6 +49,11 @@ class WpKpiDashboard_Google_Analytics
     }
   }
 
+  /**
+   * @param $analytics
+   * @param $account_id
+   * @return string
+   */
   public function get_ga_properties_html( $analytics, $account_id ) {
     $html = '';
     $properties = $this->get_ga_properties( $analytics, $account_id );
@@ -61,6 +73,11 @@ class WpKpiDashboard_Google_Analytics
     return $html;
   }
 
+  /**
+   * @param $analytics
+   * @param $account_id
+   * @return array|bool
+   */
   public function get_ga_properties( $analytics, $account_id ) {
     $raw_properties = $analytics->management_webproperties->listManagementWebproperties($account_id);
     $ga_property = $this->helper->get_option( 'ga_property' );

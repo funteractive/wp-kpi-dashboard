@@ -59,7 +59,7 @@ class HelperTest extends WP_UnitTestCase {
 
     $this->helper->save_option( $key, $value );
     $this->assertEquals(
-      get_option( $key ),
+      $this->helper->get_option( $key ),
       $value
     );
   }

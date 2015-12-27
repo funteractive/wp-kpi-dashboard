@@ -12,6 +12,9 @@ class WpKpiDashboard_Google
 
   protected $secrets_key = [ 'client_id', 'client_secret' ];
 
+  /**
+   * WpKpiDashboard_Google constructor.
+   */
   public function __construct() {
     // Include helper class.
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
@@ -65,7 +68,7 @@ class WpKpiDashboard_Google
   }
 
   /**
-   *
+   * Initialize.
    */
   private function init() {
     $json = $this->get_secrets_json();
@@ -111,6 +114,7 @@ class WpKpiDashboard_Google
   }
 
   /**
+   * Get url to Google redirect uri.
    * @return string
    */
   private function get_redirect_uri() {
@@ -118,6 +122,10 @@ class WpKpiDashboard_Google
     return $protocol . $_SERVER['HTTP_HOST'] . '/wp-admin/options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN;
   }
 
+  /**
+   * Get json for set configures for client.
+   * @return bool|mixed|string|void
+   */
   private function get_secrets_json() {
     foreach( $this->secrets_key as $key ) {
       ${$key} = $this->helper->get_request_or_option( $key );
@@ -130,6 +138,12 @@ class WpKpiDashboard_Google
     }
   }
 
+  /**
+   * Create json for set configures for client.
+   * @param $client_id
+   * @param $client_secret
+   * @return mixed|string|void
+   */
   private function create_secrets_json( $client_id, $client_secret ) {
     $array = [
       'web' => [
@@ -163,7 +177,7 @@ class WpKpiDashboard_Google
   }
 
   /**
-   *
+   * Redirect to Google authentication url.
    */
   private function redirect_to_auth_url() {
     $authUrl = $this->client->createAuthUrl();
@@ -171,6 +185,7 @@ class WpKpiDashboard_Google
   }
 
   /**
+   * Authenticate method.
    * @param $code
    */
   private function authenticate( $code ) {
@@ -218,6 +233,9 @@ class WpKpiDashboard_Google
     if( isset( $_SESSION['access_token'] ) ) unset( $_SESSION['access_token'] );
   }
 
+  /**
+   * Reset account settings.
+   */
   private function reset_account() {
     $account_options = [ 'ga_account', 'ga_property' ];
     foreach( $account_options as $key ) {
@@ -225,6 +243,9 @@ class WpKpiDashboard_Google
     }
   }
 
+  /**
+   * Save account settings.
+   */
   private function save_ga_account_settings() {
     if( $this->helper->get_request( 'ga_account' ) ) {
       $this->helper->save_option( 'ga_account', $_POST['ga_account'] );
