@@ -40,13 +40,16 @@
       xmlHttpRequest.addEventListener('loadend', function() {
         if(xmlHttpRequest.status === 200) {
           var response = xmlHttpRequest.response;
+          var $properties = document.getElementById('js-wpkpidb-properties');
 
           select.name = 'ga_property';
           select.innerHTML = response;
-          if(self.$properties.childNodes.length) {
-            self.$properties.removeChild(self.$properties.childNodes[0]);
+          if($properties.childNodes.length) {
+            while($properties.firstChild) {
+              $properties.removeChild($properties.firstChild);
+            }
           }
-          self.$properties.appendChild(select);
+          $properties.appendChild(select);
         }
       });
       xmlHttpRequest.open('POST', this.propertyUrl, true);

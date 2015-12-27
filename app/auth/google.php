@@ -53,6 +53,11 @@ class WpKpiDashboard_Google
         $data['accounts'] = $ga_accounts;
       }
 
+      $ga_account = $this->helper->get_option( 'ga_account' );
+      if( $ga_account ) {
+        $data['properties'] = $this->ga->get_ga_properties( $this->analytics, $ga_account );
+      }
+
       return $data;
       //$profile_id = $this->getFirstprofileId( $this->analytics );
       //$results = $this->get_results( $this->analytics, $profile_id );

@@ -87,14 +87,26 @@ $default_year = date( 'Y' );
           <td>
             <select name="ga_account" id="js-wpkpidb-account-select">
               <?php foreach( $analytics_datas['accounts'] as $account ): ?>
-                <option value="<?php echo esc_html( $account['id'] ); ?>"><?php echo esc_html( $account['name'] ); ?></option>
+              <option value="<?php echo esc_html( $account['id'] ); ?>"<?php if( $account['selected'] ) echo ' selected="selected"'; ?>>
+                  <?php echo esc_html( $account['name'] ); ?>
+                </option>
               <?php endforeach; ?>
             </select>
           </td>
         </tr>
         <tr>
           <th><?php $helper->e( 'Property' ); ?></th>
-          <td id="js-wpkpidb-properties"></td>
+          <td id="js-wpkpidb-properties">
+            <?php if( isset( $analytics_datas['properties'] ) && !empty( $analytics_datas['properties'] ) ): ?>
+              <select name="ga_property">
+                <?php foreach( $analytics_datas['properties'] as $property ): ?>
+                <option value="<?php echo esc_html( $property['id'] ); ?>"<?php if( $property['selected'] ) echo ' selected="selected"'; ?>>
+                    <?php echo esc_html( $property['name'] ); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            <?php endif; ?>
+          </td>
         </tr>
         </tbody>
       </table>

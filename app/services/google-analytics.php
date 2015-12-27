@@ -18,13 +18,22 @@ class WpKpiDashboard_Google_Analytics
 
   public function get_ga_accounts( $analytics ) {
     $raw_accounts = $analytics->management_accounts->listManagementAccounts();
+    $ga_account = $this->helper->get_option( 'ga_account' );
+
     if( count( $raw_accounts->getItems() ) > 0 ) {
       $items = $raw_accounts->getItems();
       $accounts = [];
       foreach( $items as $item ) {
+        $id = $item->getId();
+        if( $id == $ga_account ) {
+          $selected = 'selected';
+        } else {
+          $selected = false;
+        }
         $accounts[] = [
-          'id' => $item->getId(),
-          'name' => $item->getName()
+          'id'       => $id,
+          'name'     => $item->getName(),
+          'selected' => $selected
         ];
       }
       return $accounts;
@@ -34,26 +43,42 @@ class WpKpiDashboard_Google_Analytics
   }
 
   public function get_ga_properties_html( $analytics, $account_id ) {
-    $html = '<select name="">';
+    $html = '';
     $properties = $this->get_ga_properties( $analytics, $account_id );
     if( $properties ) {
       foreach( $properties as $property ) {
-        $html .= '<option value="' . $property['id'] . '">' . $property['name'] . '</option>';
+        if( $property['selected'] ) {
+          $selected = ' selected="selected"';
+        } else {
+          $selected = '';
+        }
+        $html .= '<option value="' . $property['id'] . '"' . $selected . '>'
+          . $property['name']
+          . '</option>';
       }
     }
 
     return $html;
   }
 
-  private function get_ga_properties( $analytics, $account_id ) {
+  public function get_ga_properties( $analytics, $account_id ) {
     $raw_properties = $analytics->management_webproperties->listManagementWebproperties($account_id);
+    $ga_property = $this->helper->get_option( 'ga_property' );
+
     if( count( $raw_properties->getItems() ) > 0 ) {
       $items = $raw_properties->getItems();
       $properties = [];
       foreach( $items as $item ) {
+        $id = $item->getId();
+        if( $id == $ga_property ) {
+          $selected = 'selected';
+        } else {
+          $selected = false;
+        }
         $properties[] = [
-          'id' => $item->getId(),
-          'name' => $item->getName()
+          'id'       => $item->getId(),
+          'name'     => $item->getName(),
+          'selected' => $selected
         ];
       }
 
