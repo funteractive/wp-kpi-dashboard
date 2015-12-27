@@ -108,6 +108,11 @@ $default_year = date( 'Y' );
             <?php endif; ?>
           </td>
         </tr>
+        <tr>
+          <th><?php $helper->e( 'Profile' ); ?></th>
+          <td id="js-wpkpidb-profiles">
+          </td>
+        </tr>
         </tbody>
       </table>
       <p class="submit">
