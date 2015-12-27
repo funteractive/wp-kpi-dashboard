@@ -9,6 +9,7 @@
       this.propertyUrl = '';
 
       this.setEvents();
+      this.properties(this.$select);
     };
 
     GA.prototype.setEvents = function() {
