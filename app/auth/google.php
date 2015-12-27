@@ -48,19 +48,6 @@ class WpKpiDashboard_Google
     if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
       $data = [];
 
-      try {
-        $this->client->setAccessToken($_SESSION['access_token']);
-        $this->analytics = new Google_Service_Analytics($this->client);
-      } catch (Google_Exception $e) {
-        $this->refresh();
-        echo $e->getMessage();
-      }
-      if( $this->helper->get_request( 'ajax_ga_account' ) ) {
-        echo $this->ga->get_ga_properties_html( $this->analytics, $_POST['ajax_ga_account'] );
-        exit();
-      }
-
-
       $ga_accounts = $this->ga->get_ga_accounts( $this->analytics );
       if( $ga_accounts ) {
         $data['accounts'] = $ga_accounts;
@@ -83,19 +70,36 @@ class WpKpiDashboard_Google
     $json = $this->get_secrets_json();
     if( $json ) {
       $this->set_client( $json );
+
+      if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
+        try {
+          $this->client->setAccessToken($_SESSION['access_token']);
+          $this->analytics = new Google_Service_Analytics($this->client);
+        } catch (Google_Exception $e) {
+          $this->refresh();
+          echo $e->getMessage();
+        }
+        if( $this->helper->get_request( 'ajax_ga_account' ) ) {
+          echo $this->ga->get_ga_properties_html( $this->analytics, $_POST['ajax_ga_account'] );
+          exit();
+        }
+      }
+
       if( $this->helper->get_request( 'submit_google' ) ) {
-        $this->redirect_to_auth_url();
-      } elseif( isset( $_GET['code'] ) ) {
-        $this->authenticate($_GET['code']);
-      } elseif( $this->helper->get_request( 'reset_google' ) ) {
-        $this->reset();
-      } else {
+        // When press "Get token" button.
         foreach( $this->secrets_key as $key ) {
           $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
           if( isset( $_POST[$key] ) && $_POST[$key] ) {
             $this->helper->save_option( $option_name, $_POST[$key] );
           }
         }
+        $this->redirect_to_auth_url();
+      } elseif( isset( $_GET['code'] ) ) {
+        // After authenticate and redirect.
+        $this->authenticate($_GET['code']);
+      } elseif( $this->helper->get_request( 'reset_google' ) ) {
+        // When press "Clear Authorization" button.
+        $this->reset();
       }
     }
   }
@@ -206,74 +210,5 @@ class WpKpiDashboard_Google
 
     // Unset access token in session.
     if( isset( $_SESSION['access_token'] ) ) unset( $_SESSION['access_token'] );
-  }
-
-  private function getFirstprofileId(&$analytics) {
-    // Get the user's first view (profile) ID.
-
-    // Get the list of accounts for the authorized user.
-    $accounts = $analytics->management_accounts->listManagementAccounts();
-
-    if (count($accounts->getItems()) > 0) {
-      $items = $accounts->getItems();
-      $firstAccountId = $items[0]->getId();
-
-      // Get the list of properties for the authorized user.
-      $properties = $analytics->management_webproperties
-        ->listManagementWebproperties($firstAccountId);
-
-      if (count($properties->getItems()) > 0) {
-        $items = $properties->getItems();
-        $firstPropertyId = $items[0]->getId();
-
-        // Get the list of views (profiles) for the authorized user.
-        $profiles = $analytics->management_profiles
-          ->listManagementProfiles($firstAccountId, $firstPropertyId);
-
-        if (count($profiles->getItems()) > 0) {
-          $items = $profiles->getItems();
-
-          // Return the first view (profile) ID.
-          return $items[0]->getId();
-
-        } else {
-          throw new Exception('No views (profiles) found for this user.');
-        }
-      } else {
-        throw new Exception('No properties found for this user.');
-      }
-    } else {
-      throw new Exception('No accounts found for this user.');
-    }
-  }
-
-  private function get_results( $analytics, $profile_id ) {
-    return $analytics->data_ga->get(
-      'ga:' . $profile_id,
-      '7daysAgo',
-      'today',
-      'ga:sessions');
-  }
-
-  private function print_results( $results ) {
-    // Parses the response from the Core Reporting API and prints
-    // the profile name and total sessions.
-    if (count($results->getRows()) > 0) {
-
-      // Get the profile name.
-      $profileName = $results->getProfileInfo()->getProfileName();
-
-      // Get the entry for the first entry in the first row.
-      $rows = $results->getRows();
-      $sessions = $rows[0][0];
-
-      // Print the results.
-      $text = "First view (profile) found: $profileName\n"
-        . "Total sessions: $sessions\n";
-
-      return $text;
-    } else {
-      return false;
-    }
   }
 }

@@ -26,17 +26,27 @@
       var response = this._getProperties(account);
 
       select.name = 'ga_property';
+      select.innerHTML = response;
 
+      this.$properties.innerHTML = select;
     };
 
-    GA.prototype._getProperties = function(account) {
+    GA.prototype.properties = function(target) {
       var xmlHttpRequest = new XMLHttpRequest();
+      var select = document.createElement('select');
+      var account = target.value;
+      var self = this;
 
       xmlHttpRequest.addEventListener('loadend', function() {
         if(xmlHttpRequest.status === 200) {
           var response = xmlHttpRequest.response;
-          console.log(response);
-          return response;
+
+          select.name = 'ga_property';
+          select.innerHTML = response;
+          if(self.$properties.childNodes.length) {
+            self.$properties.removeChild(self.$properties.childNodes[0]);
+          }
+          self.$properties.appendChild(select);
         }
       });
       xmlHttpRequest.open('POST', this.propertyUrl, true);

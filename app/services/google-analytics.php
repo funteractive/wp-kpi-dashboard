@@ -34,7 +34,15 @@ class WpKpiDashboard_Google_Analytics
   }
 
   public function get_ga_properties_html( $analytics, $account_id ) {
+    $html = '<select name="">';
     $properties = $this->get_ga_properties( $analytics, $account_id );
+    if( $properties ) {
+      foreach( $properties as $property ) {
+        $html .= '<option value="' . $property['id'] . '">' . $property['name'] . '</option>';
+      }
+    }
+
+    return $html;
   }
 
   private function get_ga_properties( $analytics, $account_id ) {
