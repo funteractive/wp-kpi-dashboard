@@ -88,12 +88,13 @@ class WpKpiDashboard_Google
       if( $this->helper->get_request( 'submit_google' ) ) {
         // When press "Get token" button.
         foreach( $this->secrets_key as $key ) {
-          $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
           if( isset( $_POST[$key] ) && $_POST[$key] ) {
-            $this->helper->save_option( $option_name, $_POST[$key] );
+            $this->helper->save_option( $key, $_POST[$key] );
           }
         }
         $this->redirect_to_auth_url();
+      } elseif( $this->helper->get_request( 'submit_ga' ) ) {
+        $this->save_ga_account_settings();
       } elseif( isset( $_GET['code'] ) ) {
         // After authenticate and redirect.
         $this->authenticate($_GET['code']);
@@ -210,5 +211,14 @@ class WpKpiDashboard_Google
 
     // Unset access token in session.
     if( isset( $_SESSION['access_token'] ) ) unset( $_SESSION['access_token'] );
+  }
+
+  private function save_ga_account_settings() {
+    if( $this->helper->get_request( 'ga_account' ) ) {
+      $this->helper->save_option( 'ga_account', $_POST['ga_account'] );
+    }
+    if( $this->helper->get_request( 'ga_property' ) ) {
+      $this->helper->save_option( 'ga_property', $_POST['ga_property'] );
+    }
   }
 }

@@ -66,6 +66,7 @@ class WpKpiDashboard_Helper
    * @param $value
    */
   public function save_option( $key, $value ) {
+    $key = WP_KPI_DASHBOARD_PREFIX . $key;
     if( get_option( $key ) ) {
       update_option( $key, $value );
     } else {

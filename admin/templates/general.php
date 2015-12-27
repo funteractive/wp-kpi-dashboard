@@ -42,7 +42,7 @@ $default_year = date( 'Y' );
   <h2><?php $helper->e( 'WP KPI Dashboard' ); ?></h2>
 
   <h3><?php $helper->e( 'Google Analytics Settings' ); ?></h3>
-  <form action="<?php echo admin_url( 'options-general.php?page=' . WP_KPI_DASHBOARD_DOMAIN ); ?>" method="POST">
+  <form action="" method="POST">
     <table class="form-table">
       <tbody>
       <tr>
@@ -79,29 +79,31 @@ $default_year = date( 'Y' );
 
   <?php if( $analytics_datas ): ?>
     <h3><?php $helper->e( 'Account Settings' ); ?></h3>
-    <table class="form-table">
-      <tbody>
-      <tr>
-        <th><?php $helper->e( 'Account' ); ?></th>
-        <td>
-          <select name="ga_account" id="js-wpkpidb-account-select">
-            <?php foreach( $analytics_datas['accounts'] as $account ): ?>
-              <option value="<?php echo esc_html( $account['id'] ); ?>"><?php echo esc_html( $account['name'] ); ?></option>
-            <?php endforeach; ?>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <th><?php $helper->e( 'Property' ); ?></th>
-        <td id="js-wpkpidb-properties"></td>
-      </tr>
-      </tbody>
-    </table>
-    <p class="submit">
-      <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
-      <input type="submit" name="reset_ga" class="button button-secondary" value="<?php $helper->e( 'Clear Account' ); ?>" />
-      <input type="submit" name="submit_ga" id="submit" class="button button-primary" value="<?php $helper->e( 'Save' ); ?>">
-    </p>
+    <form action="" method="POST">
+      <table class="form-table">
+        <tbody>
+        <tr>
+          <th><?php $helper->e( 'Account' ); ?></th>
+          <td>
+            <select name="ga_account" id="js-wpkpidb-account-select">
+              <?php foreach( $analytics_datas['accounts'] as $account ): ?>
+                <option value="<?php echo esc_html( $account['id'] ); ?>"><?php echo esc_html( $account['name'] ); ?></option>
+              <?php endforeach; ?>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><?php $helper->e( 'Property' ); ?></th>
+          <td id="js-wpkpidb-properties"></td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="submit">
+        <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
+        <input type="submit" name="reset_ga" class="button button-secondary" value="<?php $helper->e( 'Clear Account' ); ?>" />
+        <input type="submit" name="submit_ga" id="submit" class="button button-primary" value="<?php $helper->e( 'Save' ); ?>">
+      </p>
+    </form>
     <hr>
   <?php endif; ?>
 
