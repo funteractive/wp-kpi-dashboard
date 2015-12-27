@@ -78,6 +78,7 @@ class WpKpiDashboard_Helper
    * @param $key
    */
   public function delete_option( $key ) {
+    $key = WP_KPI_DASHBOARD_PREFIX . $key;
     delete_option( $key );
   }
 }

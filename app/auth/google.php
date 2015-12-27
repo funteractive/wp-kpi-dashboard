@@ -59,10 +59,6 @@ class WpKpiDashboard_Google
       }
 
       return $data;
-      //$profile_id = $this->getFirstprofileId( $this->analytics );
-      //$results = $this->get_results( $this->analytics, $profile_id );
-
-      //return $this->print_results( $results );
     } else {
       return false;
     }
@@ -99,6 +95,7 @@ class WpKpiDashboard_Google
         }
         $this->redirect_to_auth_url();
       } elseif( $this->helper->get_request( 'submit_ga' ) ) {
+        // When press "Save" in Account Settings button.
         $this->save_ga_account_settings();
       } elseif( isset( $_GET['code'] ) ) {
         // After authenticate and redirect.
@@ -106,6 +103,9 @@ class WpKpiDashboard_Google
       } elseif( $this->helper->get_request( 'reset_google' ) ) {
         // When press "Clear Authorization" button.
         $this->reset();
+      } elseif( $this->helper->get_request( 'reset_ga' ) ) {
+        // When press "Clear Account" button.
+        $this->reset_account();
       }
     }
   }
@@ -209,13 +209,20 @@ class WpKpiDashboard_Google
     // Revoke access token.
     $this->client->revokeToken();
 
+    $this->reset_account();
     foreach( $this->secrets_key as $key ) {
-      $option_name = WP_KPI_DASHBOARD_PREFIX . $key;
-      $this->helper->delete_option( $option_name, $_POST[$key] );
+      $this->helper->delete_option( $key );
     }
 
     // Unset access token in session.
     if( isset( $_SESSION['access_token'] ) ) unset( $_SESSION['access_token'] );
+  }
+
+  private function reset_account() {
+    $account_options = [ 'ga_account', 'ga_property' ];
+    foreach( $account_options as $key ) {
+      $this->helper->delete_option( $key );
+    }
   }
 
   private function save_ga_account_settings() {
