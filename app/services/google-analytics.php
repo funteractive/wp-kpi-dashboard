@@ -105,6 +105,52 @@ class WpKpiDashboard_Google_Analytics
     }
   }
 
+  public function get_ga_profiles_html( &$analytics, $account_id, $property_id ) {
+    $html = '';
+    $profiles = $this->get_ga_profiles( $analytics, $account_id, $property_id );
+    if( $profiles ) {
+      foreach( $profiles as $profile ) {
+        if( $profile['selected'] ) {
+          $selected = ' selected="selected"';
+        } else {
+          $selected = '';
+        }
+        $html .= '<option value="' . $profile['id'] . '"' . $selected . '>'
+          . $profile['name']
+          . '</option>';
+      }
+    }
+
+    return $html;
+  }
+
+  public function get_ga_profiles( &$analytics, $account_id, $property_id ) {
+    $raw_profiles = $analytics->management_profiles->listManagementProfiles( $account_id, $property_id );
+    $ga_profile = $this->helper->get_option( 'ga_profile' );
+
+    if( count( $raw_profiles->getItems() ) > 0 ) {
+      $items = $raw_profiles->getItems();
+      $profiles = [];
+      foreach( $items as $item ) {
+        $id = $item->getId();
+        if( $id == $ga_profile ) {
+          $selected = 'selected';
+        } else {
+          $selected = false;
+        }
+        $profiles[] = [
+          'id'       => $item->getId(),
+          'name'     => $item->getName(),
+          'selected' => $selected
+        ];
+      }
+
+      return $profiles;
+    } else {
+      return false;
+    }
+  }
+
   public function get_pageviews( &$analytics, $profile_id, $period ) {
     return $analytics->data_ga->get(
       'ga:' . $profile_id,
