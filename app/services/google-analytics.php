@@ -151,12 +151,12 @@ class WpKpiDashboard_Google_Analytics
     }
   }
 
-  public function get_pageviews( &$analytics, $period ) {
+  public function get_pageviews( &$analytics, $start_date, $end_date ) {
     if( $profile_id = $this->helper->get_option( 'ga_profile' ) ) {
       $results = $analytics->data_ga->get(
         'ga:' . $profile_id,
-        '7daysAgo',
-        'today',
+        $start_date,
+        $end_date,
         'ga:pageviews'
       );
       $rows = $results->getRows();

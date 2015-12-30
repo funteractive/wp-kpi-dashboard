@@ -124,7 +124,27 @@ EOL;
   }
 
   private function get_pageview_data( $period ) {
-    $data_pageview = $this->google->dashboard_get_gadata( $period );
+    $year = date( 'Y' );
+    $month = date( 'm' );
+    $date = date( 'd' );
+    $days = date( 't' );
+
+    switch( $period ) {
+      case 'Daily':
+        $start_date = 'today';
+        $end_date = 'today';
+        break;
+      case 'Monthly':
+        $start_date = $year . '-' . $month . '-01';
+        $end_date = $year . '-' . $month . '-' . $days;
+        break;
+      case 'Yearly':
+        $start_date = $year . '-01-01';
+        $end_date = $year . '-12-31';
+        break;
+    }
+
+    $data_pageview = $this->google->dashboard_get_gadata( $start_date, $end_date );
 
     return $data_pageview;
   }

@@ -71,8 +71,8 @@ class WpKpiDashboard_Google
     }
   }
 
-  public function dashboard_get_gadata( $period ) {
-    $pagevies = $this->ga->get_pageviews( $this->analytics, $period );
+  public function dashboard_get_gadata( $start_date, $end_date ) {
+    $pagevies = $this->ga->get_pageviews( $this->analytics, $start_date, $end_date );
 
     return $pagevies;
   }
