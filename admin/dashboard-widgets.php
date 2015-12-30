@@ -5,11 +5,17 @@ if ( !defined( 'ABSPATH' ) )
   exit();
 
 
+/**
+ * Class WpKpiDashboard_Widgets
+ */
 class WpKpiDashboard_Widgets
 {
 
   protected $period_name = 'wpkpidb_period';
 
+  /**
+   * WpKpiDashboard_Widgets constructor.
+   */
   public function __construct() {
     // include helper
     require_once( WP_KPI_DASHBOARD_DIR . 'app/helper.php' );
@@ -26,6 +32,9 @@ class WpKpiDashboard_Widgets
     add_action( 'wp_dashboard_setup', array( &$this, 'add_dashboard_widgets' ) );
   }
 
+  /**
+   * Add dashboard widgets.
+   */
   public function add_dashboard_widgets() {
     wp_add_dashboard_widget(
       'wp_kpi_dashboard',                     // Widget slug.
@@ -49,6 +58,12 @@ class WpKpiDashboard_Widgets
     echo $html;
   }
 
+  /**
+   * @param $kpi
+   * @param $pageview_data
+   * @param $title
+   * @return mixed|string|void
+   */
   private function get_kpi_block_html( $kpi, $pageview_data, $title ) {
     $html = <<<EOL
 <div class="wpkpi_db_block">
@@ -63,6 +78,10 @@ EOL;
     return $html;
   }
 
+  /**
+   * @param $period
+   * @return mixed|string|void
+   */
   private function get_select_period_html( $period ) {
     $period_arr = [ 'Daily', 'Monthly', 'Yearly' ];
     $options = '';
@@ -86,6 +105,10 @@ EOL;
     return $html;
   }
 
+  /**
+   * @param $period
+   * @return float|int
+   */
   private function get_pageview_kpi( $period ) {
     $page_view_kpi = $this->pageview->get_kpi();
     $year = date( 'Y' );
@@ -113,6 +136,9 @@ EOL;
     return $show_kpi;
   }
 
+  /**
+   * @return string
+   */
   private function get_period() {
     if( isset( $_POST[$this->period_name] ) && $_POST[$this->period_name] ) {
       $period = esc_html( $_POST[$this->period_name] );
@@ -123,6 +149,10 @@ EOL;
     return $period;
   }
 
+  /**
+   * @param $period
+   * @return bool
+   */
   private function get_pageview_data( $period ) {
     $year = date( 'Y' );
     $month = date( 'm' );

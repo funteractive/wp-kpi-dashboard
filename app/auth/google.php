@@ -71,6 +71,11 @@ class WpKpiDashboard_Google
     }
   }
 
+  /**
+   * @param $start_date
+   * @param $end_date
+   * @return bool
+   */
   public function dashboard_get_gadata( $start_date, $end_date ) {
     $pagevies = $this->ga->get_pageviews( $this->analytics, $start_date, $end_date );
 

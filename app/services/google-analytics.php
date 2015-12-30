@@ -105,6 +105,12 @@ class WpKpiDashboard_Google_Analytics
     }
   }
 
+  /**
+   * @param $analytics
+   * @param $account_id
+   * @param $property_id
+   * @return string
+   */
   public function get_ga_profiles_html( &$analytics, $account_id, $property_id ) {
     $html = '';
     $profiles = $this->get_ga_profiles( $analytics, $account_id, $property_id );
@@ -124,6 +130,12 @@ class WpKpiDashboard_Google_Analytics
     return $html;
   }
 
+  /**
+   * @param $analytics
+   * @param $account_id
+   * @param $property_id
+   * @return array|bool
+   */
   public function get_ga_profiles( &$analytics, $account_id, $property_id ) {
     $raw_profiles = $analytics->management_profiles->listManagementProfiles( $account_id, $property_id );
     $ga_profile = $this->helper->get_option( 'ga_profile' );
@@ -151,6 +163,12 @@ class WpKpiDashboard_Google_Analytics
     }
   }
 
+  /**
+   * @param $analytics
+   * @param $start_date
+   * @param $end_date
+   * @return bool
+   */
   public function get_pageviews( &$analytics, $start_date, $end_date ) {
     if( $profile_id = $this->helper->get_option( 'ga_profile' ) ) {
       $results = $analytics->data_ga->get(

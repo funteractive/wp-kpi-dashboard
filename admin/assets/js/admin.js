@@ -2,6 +2,10 @@
   'use strict';
 
   window.onload = function() {
+    /**
+     *
+     * @constructor
+     */
     var GA = function() {
       this.$properties = document.getElementById('js-wpkpidb-properties');
 
@@ -89,6 +93,11 @@
     new GA();
 
 
+    /**
+     *
+     * @returns {boolean}
+     * @constructor
+     */
     var Years = function() {
       this.$select = document.getElementById('js-wpkpidb-years-select');
       if(!this.$select)
@@ -121,6 +130,11 @@
     new Years();
 
 
+    /**
+     *
+     * @returns {boolean}
+     * @constructor
+     */
     var DashboardForm = function() {
       this.$form = document.getElementById('js-wpkpidb-db-form');
       this.$select = document.getElementById('js-wpkpidb-db-period-select');
