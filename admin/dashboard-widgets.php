@@ -16,6 +16,9 @@ class WpKpiDashboard_Widgets
     $this->helper = new WpKpiDashboard_Helper();
 
     // include services
+    require_once( WP_KPI_DASHBOARD_DIR . 'app/auth/google.php' );
+    $this->google = new WpKpiDashboard_Google();
+
     require_once( WP_KPI_DASHBOARD_DIR . 'app/services/pageview.php' );
     $this->pageview = new WpKpiDashboard_Pageview();
 
@@ -27,7 +30,7 @@ class WpKpiDashboard_Widgets
     wp_add_dashboard_widget(
       'wp_kpi_dashboard',                     // Widget slug.
       $this->helper->_( 'WP KPI Dashboard' ), // Title.
-      array( &$this, 'init_widget' )          // Display function.
+      [ &$this, 'init_widget' ]               // Display function.
     );
   }
 
@@ -40,16 +43,17 @@ class WpKpiDashboard_Widgets
     $html = $this->get_select_period_html( $period );
 
     $kpi = $this->get_pageview_kpi( $period );
-    $html .= $this->get_kpi_block_html( $kpi, 'Pageview' );
+    $pageview_data = $this->get_pageview_data( $period );
+    $html .= $this->get_kpi_block_html( $kpi, $pageview_data, 'Pageview' );
 
     echo $html;
   }
 
-  private function get_kpi_block_html( $kpi, $title ) {
+  private function get_kpi_block_html( $kpi, $pageview_data, $title ) {
     $html = <<<EOL
 <div class="wpkpi_db_block">
   <p class="wpkpi_db_block_title">{$title}</p>
-  <span class="wpkpi_db_value">100</span>
+  <span class="wpkpi_db_value">{$pageview_data}</span>
   <span class="wpkpi_db_divider">/</span>
   <span class="wpkpi_db_kpi">{$kpi}</span>
 </div>
@@ -117,6 +121,12 @@ EOL;
     }
 
     return $period;
+  }
+
+  private function get_pageview_data( $period ) {
+    $data_pageview = $this->google->dashboard_get_gadata( $period );
+
+    return $data_pageview;
   }
 
 }

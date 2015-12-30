@@ -151,12 +151,22 @@ class WpKpiDashboard_Google_Analytics
     }
   }
 
-  public function get_pageviews( &$analytics, $profile_id, $period ) {
-    return $analytics->data_ga->get(
-      'ga:' . $profile_id,
-      '7daysAgo',
-      'today',
-      'ga:sessions'
-    );
+  public function get_pageviews( &$analytics, $period ) {
+    if( $profile_id = $this->helper->get_option( 'ga_profile' ) ) {
+      $results = $analytics->data_ga->get(
+        'ga:' . $profile_id,
+        '7daysAgo',
+        'today',
+        'ga:pageviews'
+      );
+      $rows = $results->getRows();
+      if( $rows && isset( $rows[0][0] ) ) {
+        return $rows[0][0];
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 }

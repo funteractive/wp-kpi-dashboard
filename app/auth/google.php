@@ -71,6 +71,12 @@ class WpKpiDashboard_Google
     }
   }
 
+  public function dashboard_get_gadata( $period ) {
+    $pagevies = $this->ga->get_pageviews( $this->analytics, $period );
+
+    return $pagevies;
+  }
+
   /**
    * Initialize.
    */
