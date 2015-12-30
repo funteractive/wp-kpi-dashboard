@@ -2,34 +2,33 @@
   'use strict';
 
   window.onload = function() {
+    /**
+     *
+     * @constructor
+     */
     var GA = function() {
-      this.$select = document.getElementById('js-wpkpidb-account-select');
       this.$properties = document.getElementById('js-wpkpidb-properties');
 
-      this.propertyUrl = '';
+      this.ajaxUrl = '';
 
       this.setEvents();
-      this.properties(this.$select);
     };
 
     GA.prototype.setEvents = function() {
       var self = this;
-      if(this.$select) {
-        this.$select.addEventListener('change', function(e) {
+      var $select = document.getElementById('js-wpkpidb-account-select');
+      var $propertySelect = document.getElementById('js-wpkpidb-property-select');
+
+      if($select) {
+        $select.addEventListener('change', function(e) {
           self.properties(e.target);
         });
       }
-    };
-
-    GA.prototype.properties = function(target) {
-      var select = document.createElement('select');
-      var account = target.value;
-      var response = this._getProperties(account);
-
-      select.name = 'ga_property';
-      select.innerHTML = response;
-
-      this.$properties.innerHTML = select;
+      if($propertySelect) {
+        $propertySelect.addEventListener('change', function(e) {
+          self.profiles(e.target);
+        });
+      }
     };
 
     GA.prototype.properties = function(target) {
@@ -44,6 +43,7 @@
           var $properties = document.getElementById('js-wpkpidb-properties');
 
           select.name = 'ga_property';
+          select.id = 'js-wpkpidb-property-select';
           select.innerHTML = response;
           if($properties.childNodes.length) {
             while($properties.firstChild) {
@@ -51,16 +51,53 @@
             }
           }
           $properties.appendChild(select);
+
+          self.profiles();
+          self.setEvents();
         }
       });
-      xmlHttpRequest.open('POST', this.propertyUrl, true);
+      xmlHttpRequest.open('POST', this.ajaxUrl, true);
       xmlHttpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xmlHttpRequest.send('ajax_ga_account=' + account);
+    };
+
+    GA.prototype.profiles = function() {
+      var xmlHttpRequest = new XMLHttpRequest();
+      var select = document.createElement('select');
+      var account = document.getElementById('js-wpkpidb-account-select').value;
+      var property = document.getElementById('js-wpkpidb-property-select').value;
+      var self = this;
+
+      xmlHttpRequest.addEventListener('loadend', function() {
+        if(xmlHttpRequest.status === 200) {
+          var response = xmlHttpRequest.response;
+          var $profiles = document.getElementById('js-wpkpidb-profiles');
+
+          select.name = 'ga_profile';
+          select.innerHTML = response;
+          if($profiles.childNodes.length) {
+            while($profiles.firstChild) {
+              $profiles.removeChild($profiles.firstChild);
+            }
+          }
+          $profiles.appendChild(select);
+
+          self.setEvents();
+        }
+      });
+      xmlHttpRequest.open('POST', this.ajaxUrl, true);
+      xmlHttpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xmlHttpRequest.send('ajax_ga_account=' + account + '&ajax_ga_property=' + property);
     };
 
     new GA();
 
 
+    /**
+     *
+     * @returns {boolean}
+     * @constructor
+     */
     var Years = function() {
       this.$select = document.getElementById('js-wpkpidb-years-select');
       if(!this.$select)
@@ -93,6 +130,11 @@
     new Years();
 
 
+    /**
+     *
+     * @returns {boolean}
+     * @constructor
+     */
     var DashboardForm = function() {
       this.$form = document.getElementById('js-wpkpidb-db-form');
       this.$select = document.getElementById('js-wpkpidb-db-period-select');

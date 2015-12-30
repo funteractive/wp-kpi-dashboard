@@ -57,14 +57,29 @@ class WpKpiDashboard_Google
       }
 
       $ga_account = $this->helper->get_option( 'ga_account' );
+      $ga_property = $this->helper->get_option( 'ga_property' );
       if( $ga_account ) {
         $data['properties'] = $this->ga->get_ga_properties( $this->analytics, $ga_account );
+      }
+      if( $ga_property ) {
+        $data['profiles'] = $this->ga->get_ga_profiles( $this->analytics, $ga_account, $ga_property );
       }
 
       return $data;
     } else {
       return false;
     }
+  }
+
+  /**
+   * @param $start_date
+   * @param $end_date
+   * @return bool
+   */
+  public function dashboard_get_gadata( $start_date, $end_date ) {
+    $pagevies = $this->ga->get_pageviews( $this->analytics, $start_date, $end_date );
+
+    return $pagevies;
   }
 
   /**
@@ -84,7 +99,11 @@ class WpKpiDashboard_Google
           echo $e->getMessage();
         }
         if( $this->helper->get_request( 'ajax_ga_account' ) ) {
-          echo $this->ga->get_ga_properties_html( $this->analytics, $_POST['ajax_ga_account'] );
+          if( $this->helper->get_request( 'ajax_ga_property' ) ) {
+            echo $this->ga->get_ga_profiles_html( $this->analytics, $_POST['ajax_ga_account'], $_POST['ajax_ga_property'] );
+          } else {
+            echo $this->ga->get_ga_properties_html( $this->analytics, $_POST['ajax_ga_account'] );
+          }
           exit();
         }
       }
@@ -252,6 +271,9 @@ class WpKpiDashboard_Google
     }
     if( $this->helper->get_request( 'ga_property' ) ) {
       $this->helper->save_option( 'ga_property', $_POST['ga_property'] );
+    }
+    if( $this->helper->get_request( 'ga_profile' ) ) {
+      $this->helper->save_option( 'ga_profile', $_POST['ga_profile'] );
     }
   }
 }

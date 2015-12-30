@@ -23,7 +23,7 @@ class WpKpiDashboard_Google_Analytics
    * @param $analytics
    * @return array|bool
    */
-  public function get_ga_accounts( $analytics ) {
+  public function get_ga_accounts( &$analytics ) {
     $raw_accounts = $analytics->management_accounts->listManagementAccounts();
     $ga_account = $this->helper->get_option( 'ga_account' );
 
@@ -54,7 +54,7 @@ class WpKpiDashboard_Google_Analytics
    * @param $account_id
    * @return string
    */
-  public function get_ga_properties_html( $analytics, $account_id ) {
+  public function get_ga_properties_html( &$analytics, $account_id ) {
     $html = '';
     $properties = $this->get_ga_properties( $analytics, $account_id );
     if( $properties ) {
@@ -78,7 +78,7 @@ class WpKpiDashboard_Google_Analytics
    * @param $account_id
    * @return array|bool
    */
-  public function get_ga_properties( $analytics, $account_id ) {
+  public function get_ga_properties( &$analytics, $account_id ) {
     $raw_properties = $analytics->management_webproperties->listManagementWebproperties($account_id);
     $ga_property = $this->helper->get_option( 'ga_property' );
 
@@ -100,6 +100,89 @@ class WpKpiDashboard_Google_Analytics
       }
 
       return $properties;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * @param $analytics
+   * @param $account_id
+   * @param $property_id
+   * @return string
+   */
+  public function get_ga_profiles_html( &$analytics, $account_id, $property_id ) {
+    $html = '';
+    $profiles = $this->get_ga_profiles( $analytics, $account_id, $property_id );
+    if( $profiles ) {
+      foreach( $profiles as $profile ) {
+        if( $profile['selected'] ) {
+          $selected = ' selected="selected"';
+        } else {
+          $selected = '';
+        }
+        $html .= '<option value="' . $profile['id'] . '"' . $selected . '>'
+          . $profile['name']
+          . '</option>';
+      }
+    }
+
+    return $html;
+  }
+
+  /**
+   * @param $analytics
+   * @param $account_id
+   * @param $property_id
+   * @return array|bool
+   */
+  public function get_ga_profiles( &$analytics, $account_id, $property_id ) {
+    $raw_profiles = $analytics->management_profiles->listManagementProfiles( $account_id, $property_id );
+    $ga_profile = $this->helper->get_option( 'ga_profile' );
+
+    if( count( $raw_profiles->getItems() ) > 0 ) {
+      $items = $raw_profiles->getItems();
+      $profiles = [];
+      foreach( $items as $item ) {
+        $id = $item->getId();
+        if( $id == $ga_profile ) {
+          $selected = 'selected';
+        } else {
+          $selected = false;
+        }
+        $profiles[] = [
+          'id'       => $item->getId(),
+          'name'     => $item->getName(),
+          'selected' => $selected
+        ];
+      }
+
+      return $profiles;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * @param $analytics
+   * @param $start_date
+   * @param $end_date
+   * @return bool
+   */
+  public function get_pageviews( &$analytics, $start_date, $end_date ) {
+    if( $profile_id = $this->helper->get_option( 'ga_profile' ) ) {
+      $results = $analytics->data_ga->get(
+        'ga:' . $profile_id,
+        $start_date,
+        $end_date,
+        'ga:pageviews'
+      );
+      $rows = $results->getRows();
+      if( $rows && isset( $rows[0][0] ) ) {
+        return $rows[0][0];
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
