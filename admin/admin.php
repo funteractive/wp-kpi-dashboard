@@ -57,6 +57,7 @@ class WpKpiDashboard_Admin
   public function admin_script() {
     if( is_admin() ) {
       wp_enqueue_script( 'wp_kpi_dashboard_lodash', WP_KPI_DASHBOARD_URL . 'bower_components/lodash/lodash.min.js' );
+      wp_enqueue_script( 'wp_kpi_dashboard_d3', WP_KPI_DASHBOARD_URL . 'bower_components/d3/d3.min.js' );
       wp_enqueue_script( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'admin/assets/js/admin.js' );
     }
   }

@@ -156,6 +156,47 @@
     };
 
     new DashboardForm();
+
+
+    var DashboardGraph = function() {
+      this.$graphs = document.querySelectorAll('.js-wpkpidb-donut-graph');
+      this.width = 160;
+      this.height = 160;
+      this.radius = Math.min(this.width, this.height) / 2;
+
+      this.color = d3.scale.ordinal()
+        .range(['#0085ba', '#ccc']);
+
+
+      this.draw();
+    };
+
+    DashboardGraph.prototype.draw = function() {
+      var self = this;
+      _.forEach(this.$graphs, function($graph) {
+        var kpi = $graph.dataset.kpi;
+        var value = $graph.dataset.value;
+        var rest = Math.max(kpi - value, 0);
+        var data = [ value, rest ];
+
+        var arc = d3.svg.arc()
+          .outerRadius(self.radius - 10)
+          .innerRadius(self.radius - 20);
+
+        var pie = d3.layout.pie()
+          .value(function(d, i) { return d[i] });
+
+        var svg = d3.select('.js-wpkpidb-donut-graph').append('svg')
+          .attr('width', self.width)
+          .attr('height', self.height)
+          .append('g')
+          .attr('transform', 'translate(' + self.width / 2 + ',' + self.height / 2 + ')');
+
+
+      });
+    };
+
+    new DashboardGraph();
   };
 
 })();

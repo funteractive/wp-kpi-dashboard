@@ -69,6 +69,7 @@ class WpKpiDashboard_Widgets
     $html = <<<EOL
 <div class="wpkpi_db_block">
   <p class="wpkpi_db_block_title">{$title}</p>
+  <div class="wpkpi_db_graph js-wpkpidb-donut-graph" data-kpi={$kpi} data-value={$pageview_data}></div>
   <span class="wpkpi_db_value">{$pageview_data}</span>
   <span class="wpkpi_db_divider">/</span>
   <span class="wpkpi_db_kpi">{$kpi}</span>
