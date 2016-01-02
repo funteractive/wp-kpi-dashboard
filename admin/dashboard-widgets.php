@@ -52,8 +52,7 @@ class WpKpiDashboard_Widgets
     $html = $this->get_select_period_html( $period );
 
     $kpi = $this->get_pageview_kpi( $period );
-    //$pageview_data = $this->get_pageview_data( $period );
-    $pageview_data = 300;
+    $pageview_data = $this->get_pageview_data( $period );
     $html .= $this->get_kpi_block_html( $kpi, $pageview_data, 'Pageview' );
 
     echo $html;
