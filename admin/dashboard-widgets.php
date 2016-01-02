@@ -66,13 +66,25 @@ class WpKpiDashboard_Widgets
    * @return mixed|string|void
    */
   private function get_kpi_block_html( $kpi, $pageview_data, $title ) {
+    $rate = round( $pageview_data / $kpi * 100 );
+
     $html = <<<EOL
-<div class="wpkpi_db_block">
-  <p class="wpkpi_db_block_title">{$title}</p>
-  <div class="wpkpi_db_graph js-wpkpidb-donut-graph" data-kpi={$kpi} data-value={$pageview_data}></div>
-  <span class="wpkpi_db_value">{$pageview_data}</span>
-  <span class="wpkpi_db_divider">/</span>
-  <span class="wpkpi_db_kpi">{$kpi}</span>
+<div class="wpkpi_db_wrap">
+  <div class="wpkpi_db_block">
+    <div class="wpkpi_db_graph js-wpkpidb-donut-graph" data-kpi="{$kpi}" data-value="{$pageview_data}"></div>
+    <div class="wpkpi_db_data">
+      <p class="wpkpi_db_rate">
+        <span class="wpkpi_db_rateNum">{$rate}</span>
+        <span class="wpkpi_db_rateUnit">%</span>
+      </p>
+      <p class="wpkpi_db_number">
+        <span class="wpkpi_db_value">{$pageview_data}</span>
+        <span class="wpkpi_db_divider">/</span>
+        <span class="wpkpi_db_kpi">{$kpi}</span>
+      </p>
+    </div>
+    <p class="wpkpi_db_blockTitle">{$title}</p>
+  </div>
 </div>
 EOL;
 

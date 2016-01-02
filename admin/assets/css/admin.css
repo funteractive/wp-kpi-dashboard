@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+.wpkpi_db_wrap {
+  overflow: hidden;
+  padding: 20px 0 10px;
+}
+.wpkpi_db_block {
+  position: relative;
+  width: 160px;
+  float: left;
+}
+.wpkpi_db_blockTitle {
+  margin: -4px 0 0;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+.wpkpi_db_data {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 160px;
+  text-align: center;
+}
+.wpkpi_db_rate {
+  margin: 0;
+}
+.wpkpi_db_rateNum {
+  font-size: 30px;
+  font-weight: bold;
+}
+.wpkpi_db_number {
+  margin: 0;
+}

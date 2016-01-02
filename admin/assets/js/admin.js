@@ -178,13 +178,14 @@
         var value = $graph.dataset.value;
         var rest = Math.max(kpi - value, 0);
         var data = [ value, rest ];
+        var color = [ '#0085ba', '#eeeeee' ];
 
         var arc = d3.svg.arc()
           .outerRadius(self.radius - 10)
-          .innerRadius(self.radius - 20);
+          .innerRadius(self.radius - 18);
 
         var pie = d3.layout.pie()
-          .value(function(d, i) { return d[i] });
+          .value(function(d) { return d; });
 
         var svg = d3.select('.js-wpkpidb-donut-graph').append('svg')
           .attr('width', self.width)
@@ -192,6 +193,15 @@
           .append('g')
           .attr('transform', 'translate(' + self.width / 2 + ',' + self.height / 2 + ')');
 
+        var g = svg.selectAll('.arc')
+          .data(pie(data))
+          .enter()
+          .append('g')
+          .attr('class', 'arc');
+
+        g.append('path')
+          .attr('d', arc)
+          .style('fill', function(d, i) { return color[i]; });
 
       });
     };
