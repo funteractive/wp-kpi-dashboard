@@ -188,6 +188,9 @@ EOL;
     }
 
     $data_pageview = $this->google->dashboard_get_gadata( $start_date, $end_date );
+    if( !$data_pageview ) {
+      $data_pageview = 0;
+    }
 
     return $data_pageview;
   }
