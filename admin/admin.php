@@ -29,6 +29,7 @@ class WpKpiDashboard_Admin
     // Set hooks
     add_action( 'admin_menu',            array( &$this, 'admin_menu' ) );
     add_action( 'admin_enqueue_scripts', array( &$this, 'admin_script' ) );
+    add_action( 'admin_print_styles',    array( &$this, 'admin_css' ) );
   }
 
   /**
@@ -57,7 +58,14 @@ class WpKpiDashboard_Admin
   public function admin_script() {
     if( is_admin() ) {
       wp_enqueue_script( 'wp_kpi_dashboard_lodash', WP_KPI_DASHBOARD_URL . 'bower_components/lodash/lodash.min.js' );
+      wp_enqueue_script( 'wp_kpi_dashboard_d3', WP_KPI_DASHBOARD_URL . 'bower_components/d3/d3.min.js' );
       wp_enqueue_script( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'admin/assets/js/admin.js' );
+    }
+  }
+
+  public function admin_css() {
+    if( is_admin() ) {
+      wp_enqueue_style( 'wp_kpi_dashboard_admin', WP_KPI_DASHBOARD_URL . 'admin/assets/css/admin.css' );
     }
   }
 
