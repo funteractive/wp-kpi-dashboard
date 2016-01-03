@@ -185,6 +185,7 @@
           .innerRadius(self.radius - 18);
 
         var pie = d3.layout.pie()
+          .sort(null)
           .value(function(d) { return d; });
 
         var svg = d3.select('.js-wpkpidb-donut-graph').append('svg')
