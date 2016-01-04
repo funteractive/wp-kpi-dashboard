@@ -48,7 +48,7 @@ class WpKpiDashboard_Google
    * @throws Exception
    */
   public function template_get_gadata() {
-    if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
+    if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] && isset( $this->analytics ) && $this->analytics ) {
       $data = [];
 
       $ga_accounts = $this->ga->get_ga_accounts( $this->analytics );
@@ -77,9 +77,12 @@ class WpKpiDashboard_Google
    * @return bool
    */
   public function dashboard_get_gadata( $start_date, $end_date ) {
-    $pagevies = $this->ga->get_pageviews( $this->analytics, $start_date, $end_date );
-
-    return $pagevies;
+    if( isset( $this->analytics ) && $this->analytics ) {
+      $pagevies = $this->ga->get_pageviews( $this->analytics, $start_date, $end_date );
+      return $pagevies;
+    } else {
+      return false;
+    }
   }
 
   /**
