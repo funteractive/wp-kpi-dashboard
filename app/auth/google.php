@@ -48,7 +48,7 @@ class WpKpiDashboard_Google
    * @throws Exception
    */
   public function template_get_gadata() {
-    if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] ) {
+    if( isset( $_SESSION['access_token'] ) && $_SESSION['access_token'] && isset( $this->analytics ) && $this->analytics ) {
       $data = [];
 
       $ga_accounts = $this->ga->get_ga_accounts( $this->analytics );
