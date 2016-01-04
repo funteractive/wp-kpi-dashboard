@@ -77,9 +77,12 @@ class WpKpiDashboard_Google
    * @return bool
    */
   public function dashboard_get_gadata( $start_date, $end_date ) {
-    $pagevies = $this->ga->get_pageviews( $this->analytics, $start_date, $end_date );
-
-    return $pagevies;
+    if( isset( $this->analytics ) && $this->analytics ) {
+      $pagevies = $this->ga->get_pageviews( $this->analytics, $start_date, $end_date );
+      return $pagevies;
+    } else {
+      return false;
+    }
   }
 
   /**
